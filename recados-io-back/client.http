@@ -1,2 +1,14 @@
-GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages HTTP/1.1
+GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages
 content-type: application/json
+
+###
+
+GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages/message/123
+content-type: application/json
+
+###
+
+GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages/new
+content-type: application/json
+
+###

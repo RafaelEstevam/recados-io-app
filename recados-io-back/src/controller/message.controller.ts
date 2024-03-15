@@ -11,7 +11,7 @@ export default {
         return res.send({message: 'getall'})
     },
     
-    post(req: Request, res: Response) {
+    async post(req: Request, res: Response) {
         // const {author, date, text, type} = req.body;
         // const newMessage: MessageInterface = {
         //     author,
@@ -20,28 +20,32 @@ export default {
         //     type
         // }
 
-        // const mockMessage:MessageInterface = {
-        //     author: 'Rafael',
-        //     date: new Date(),
-        //     text: 'Recado salvo no banco',
-        //     type: 'danger'
-        // }
+        const mockMessage:MessageInterface = {
+            author: 'Rafael',
+            date: new Date(),
+            text: 'Recado salvo no banco',
+            type: 'danger'
+        }
 
-        // const message = await Message.create(mockMessage);
+        const message = await Message.create(mockMessage);
+        await message.save();
 
-        // console.log(mockMessage);
-
-        // await message.save();
-        // res.status(200).json(message);
-
-        return res.send({message: 'post'});
+        return res.send(message);
     },
 
-    update(req: Request, res: Response){
-        return res.send({message: 'update'});
-    },
+    // update(req: Request, res: Response){
+    //     return res.send({message: 'update'});
+    // },
 
-    delete(req: Request, res: Response){
-        return res.send({message: 'delete'});
+    async delete(req: Request, res: Response){
+        const {id} = req.params;
+        const message = await Message.findById(id);
+
+        if(!message){
+            return res.status(404).send({message: 'Não encontrado'})
+        }
+
+        await Message.findByIdAndDelete(id);
+        return res.send({message: 'Delete'});
     }
 }

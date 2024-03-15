@@ -20,8 +20,8 @@ routes.post('/pusher/auth', (req: Request, res: Response) => {
 
 routes.get('/messages', MessageController.getAll);
 routes.get('/messages/message/:id', MessageController.get);
-routes.post('/messages/new', MessageController.post);
-routes.put('/messages/message/:id', MessageController.update);
-routes.delete('/messages/message/:id', MessageController.delete);
+routes.get('/messages/new', MessageController.post);
+// routes.get('/messages/edit/:id', MessageController.update);
+routes.get('/messages/delete/:id', MessageController.delete);
 
 export {routes};
