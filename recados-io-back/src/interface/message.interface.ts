@@ -3,5 +3,6 @@ export interface MessageInterface {
     author: String,
     text: String,
     type: String,
-    date: Date
+    date: Date,
+    channel: String,
 }

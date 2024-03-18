@@ -7,35 +7,34 @@ export default {
         return res.send({message: 'get'})
     },
 
-    getAll(req: Request, res: Response){
-        return res.send({message: 'getall'})
+    async getAll(req: Request, res: Response){
+        const messages = await Message.find();
+        return res.json(messages)
+    },
+
+    async getAllByChannelId(req: Request, res: Response){
+        const {channelId} = req.params;
+        const messages = await Message.find({channel: channelId});
+        return res.json(messages)
     },
     
     async post(req: Request, res: Response) {
-        // const {author, date, text, type} = req.body;
-        // const newMessage: MessageInterface = {
-        //     author,
-        //     date: new Date(date),
-        //     text,
-        //     type
-        // }
 
-        const mockMessage:MessageInterface = {
-            author: 'Rafael',
+        const {author, channel, text, type} = req.body;
+
+        const newMessage: MessageInterface = {
+            author,
             date: new Date(),
-            text: 'Recado salvo no banco',
-            type: 'danger'
+            text,
+            type,
+            channel
         }
 
-        const message = await Message.create(mockMessage);
+        const message = await Message.create(newMessage);
         await message.save();
 
         return res.send(message);
     },
-
-    // update(req: Request, res: Response){
-    //     return res.send({message: 'update'});
-    // },
 
     async delete(req: Request, res: Response){
         const {id} = req.params;

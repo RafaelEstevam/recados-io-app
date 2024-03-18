@@ -7,6 +7,7 @@ const MessageSquema = new Schema({
     author: String,
     type: String,
     date: Date,
+    channel: String,
 });
 
 export default mongoose.model('Messages', MessageSquema)

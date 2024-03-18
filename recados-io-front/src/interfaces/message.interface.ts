@@ -1,8 +1,8 @@
 export interface MessageInterface {
-  id: string,
+  _id?: string,
   author: string,
-  type: string,
-  date: string,
+  type: 'important' | 'not-important' | 'urgent' | string,
+  date?: string,
   text: string,
   channel: string,
 }

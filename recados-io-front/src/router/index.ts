@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/board',
+    path: '/board/:channel',
     name: 'board',
     component: BoardView
   }

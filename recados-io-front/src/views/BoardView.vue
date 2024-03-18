@@ -2,9 +2,11 @@
   <div class="board view">
     <h1>Board</h1>
     <div class="board__messages">
-      <div v-for="message in messages" :key="message.id">
+      <div v-for="message in messages" :key="message._id">
         <message :message="message" />
       </div>
+      <button @click="setShow(true)">+ Add recado</button>
+      <modal v-if="show" @setShow="setShow"/>
     </div>
   </div>
 </template>
@@ -12,26 +14,45 @@
 <script lang="ts">
 
   import Message from '@/components/Message.vue';
+  import Modal from '@/components/Modal.vue';
+  import API from '@/config/api';
 
-  export default {
+  import { defineComponent } from 'vue';
+  import { useRoute } from 'vue-router';
+
+  export default defineComponent({
     name: 'board',
     components: {
-      Message
+      Message,
+      Modal
+    },
+    setup() {
+      const route = useRoute();
+      return {
+        route
+      };
     },
     data(){
       return {
-        messages: [
-          {id: '1', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '2', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '3', author: 'Rafael', type: 'not-important', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '4', author: 'Anonimo', type: 'urgent', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '5', author: 'Rafael', type: 'urgent', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '6', author: 'Anonimo', type: 'not-important', channel: '', date: '18-03-2024', text: 'Recado curto'},
-          {id: '7', author: 'Anonimo', type: 'not-important', channel: '', date: '18-03-2024', text: 'Recado curto'},
-        ]
+        messages: [],
+        show: false
+      }
+    },
+    async mounted(){
+      try{
+        const response = await API.get(`/messages/all/${this.$route.params.channel}`);
+        this.messages = response.data;
+      }catch(e){
+        console.log(e)
+      }
+    },
+    methods: {
+      setShow(show:boolean){
+        this.show = show
       }
     }
-  }
+    
+  });
 </script>
 
 <style scoped lang="scss">

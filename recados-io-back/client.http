@@ -1,14 +1,39 @@
-GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages
+GET http://localhost:8888/messages
 content-type: application/json
 
 ###
 
-GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages/message/123
+GET http://localhost:8888/messages/all/private-my-channel
 content-type: application/json
 
 ###
 
-GET https://friendly-guide-w565rvrqrp3gwj6-8888.app.github.dev/messages/new
+GET http://localhost:8888/messages/message/123
 content-type: application/json
 
 ###
+
+POST http://localhost:8888/messages/new HTTP/1.1
+content-type: application/json
+
+{
+  "author": "Rafael",
+  "text": "Recado salvo no banco",
+  "type": "not-important",
+  "channel": "private-my-channel"
+}
+
+###
+
+DELETE http://localhost:8888/messages/delete/65f85998ec674aa1c903db7b
+content-type: application/json
+
+###
+
+POST http://localhost:8888/pusher/auth HTTP/1.1
+content-type: application/json
+
+{
+  "socket_id": "Rafael",
+  "channel_name": "private-my-channel"
+}
