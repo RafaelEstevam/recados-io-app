@@ -3,6 +3,14 @@
 </template>
 
 <style lang="scss">
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -22,5 +30,10 @@ nav {
       color: #42b983;
     }
   }
+}
+
+.view{
+  width: 100%;
+  min-height: 100vh;
 }
 </style>
