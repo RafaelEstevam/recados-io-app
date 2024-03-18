@@ -4,5 +4,5 @@ export interface MessageInterface {
   type: 'important' | 'not-important' | 'urgent' | string,
   date?: string,
   text: string,
-  channel: string,
+  channel?: any,
 }

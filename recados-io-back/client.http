@@ -37,3 +37,16 @@ content-type: application/json
   "socket_id": "Rafael",
   "channel_name": "private-my-channel"
 }
+
+###
+
+POST http://localhost:8888/new-message HTTP/1.1
+content-type: application/json
+
+{
+  "author": "Sistema",
+  "type": "important",
+  "date": "03-18-2024",
+  "text": "Essa é uma mensagem do sistema. Mostrar ela na tela",
+  "channel": "private-my-channel"
+}

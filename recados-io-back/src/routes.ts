@@ -9,19 +9,21 @@ routes.get('/', (req: Request, res: Response) => {
     res.send({message: 'Hello world' })
 });
 
-// routes.get('/board/:channelName', (req: Request, res: Response) => {
-//     const {channelName} = req.params;
-//     res.status(200).json({channelName})
-// })
-
 routes.post('/pusher/auth', (req: Request, res: Response) => {
-
     const socketId = req.body.socket_id;
     const channel = req.body.channel_name;
     const auth = pusher.authorizeChannel(socketId, channel);
     res.send(auth);
-    // res.send({message: 'connected'})
+});
+
+routes.post('/new-message', (req, res) => {
+    const message = req.body;
     
+    pusher.trigger(message?.channel, "client-my-event", {
+        message: message,
+        type: 'message'
+    });
+    res.json({message: 'Mensagem enviada'});
 });
 
 routes.get('/messages', MessageController.getAll);

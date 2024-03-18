@@ -46,12 +46,21 @@
   import GPT from '@/config/gpt';
 
   import { MessageInterface } from '@/interfaces/message.interface';
+  import { useRoute } from 'vue-router';
 
   export default defineComponent({
     name: 'modal',
+
+    setup() {
+      const route = useRoute();
+      return {
+        route,
+      };
+    },
     
     data(){
       return {
+        author: '',
         message: '',
         gptMessage: '',
         messageType: 'not-important',
@@ -64,8 +73,8 @@
       async handleSubmit(){
 
         const data:MessageInterface = {
-          author: 'Anonimo',
-          channel: 'private-my-channel',
+          author: this.author,
+          channel: `private-${this.$route.params.channel}`,
           text: this.message,
           type: this.messageType
         };
