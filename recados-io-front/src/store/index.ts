@@ -1,13 +1,24 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
 
-export default createStore({
+interface RootState {
+  showModal: boolean;
+}
+
+export default createStore<RootState>({
   state: {
+    showModal: false
   },
   getters: {
   },
   mutations: {
+    setShowModal(state, show: boolean) {
+      state.showModal = show;
+    },
   },
   actions: {
+    handleShowModal({ commit }, payload: { showModal: boolean }){
+      commit('setShowModal', payload.showModal);
+    },
   },
   modules: {
   }

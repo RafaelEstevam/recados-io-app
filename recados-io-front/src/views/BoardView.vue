@@ -1,33 +1,34 @@
 <template>
   <div class="board view">
-    <h1>Board</h1>
+    <headerComponent />
     <div class="board__messages">
       <div v-for="message in messages" :key="message._id">
         <message :message="message" />
       </div>
       <button @click="setShow(true)">+ Add recado</button>
-      <modal v-if="show" @setShow="setShow"/>
+      <modal
+        @handleClientActions="handleClientActions"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 
+  import HeaderComponent from '@/components/Header.vue';
   import Message from '@/components/Message.vue';
   import Modal from '@/components/Modal.vue';
   import API from '@/config/api';
   import pusher from '@/config/pusher';
-import { MessageInterface } from '@/interfaces/message.interface';
+  import { MessageInterface } from '@/interfaces/message.interface';
 
   import { defineComponent, ref } from 'vue';
   import { useRoute } from 'vue-router';
 
-  // const channelName = 'my-channel';
-  // const channel = pusher.subscribe(channelName);
-
   export default defineComponent({
     name: 'board',
     components: {
+      HeaderComponent,
       Message,
       Modal
     },
@@ -57,43 +58,27 @@ import { MessageInterface } from '@/interfaces/message.interface';
     },
     
     mounted(){
-      // const {channel} = this.$route.params;
-      // this.handlePusherConnect(channel);
-      // await this.handlePusherLogin();
       this.handleGetMessagesByChannel();
       this.handleConnect();
-      // this.handleLogin();
-      // await this.handleConnect();
     },
 
     created() {
     },
 
     methods: {
+
       setShow(show:boolean){
         this.show = show
       },
 
       async handleGetMessagesByChannel(){
         try{
-          const response = await API.get(`/messages/all/${this.$route.params.channel}`);
+          const response = await API.get(`/messages/all/private-${this.$route.params.channel}`);
           this.messages = response.data;
         }catch(e){
           console.log(e)
         }
       },
-
-      // handleLogin(){
-      //   this.socket_id = pusher.connection.socket_id;
-      //   const data = {
-      //     socket_id: pusher.connection.socket_id,
-      //     user_id: new Date().getTime(),
-      //     channel: this.channelName
-      //   };
-      //   API.post('/pusher/auth', data).then((response:any) => {
-      //     this.auth = response.data.auth;
-      //   });
-      // },
 
       handleConnect(){
         this.channel = pusher.subscribe(this.channelName);
@@ -121,51 +106,39 @@ import { MessageInterface } from '@/interfaces/message.interface';
             this.showTyping = false
           }
         }); 
+      },
+
+      handleClientActions(action:string, message:MessageInterface){
+        switch(action){
+          case 'typing':
+            this.handleClientTyping()
+            break;
+          case 'not-typing':
+            this.handleClientNotTyping()
+            break;
+          default:
+            this.handleSendToChannel(message)
+            break;
+        }
+      },
+
+      async handleSendToChannel(message: MessageInterface){
+        this.channel.trigger(this.channelEvent,{
+          message,
+          type: 'message'
+        });
+
+        await this.handleGetMessagesByChannel();
+      },
+
+      handleClientTyping(){
+        this.channel.trigger(this.channelEvent, {channelName: this.channelName, id: '123', userName: 'teste', type: "typing"});
+      },
+
+      handleClientNotTyping(){
+        this.channel.trigger(this.channelEvent, {channelName: this.channelName, id: '123', userName: 'teste', type: "not-typing"});
       }
-
-      // handlePusherLogin: () => {
-        // console.log(pusher.connection);
-        // console.log(pusher.connection.socket_id);
-
-        // const data = {
-        //   socket_id: pusher.connection.socket_id,
-        //   user_id: new Date().getTime(),
-        //   channel: channelName
-        // };
-
-        // console.log(data);
-
-        // try{
-        //   const auth = await API.post('/pusher/auth', data);
-        // }catch(e){
-        //   console.log(e);
-        // }
-      // },
-
-      // handlePusherConnect(channelName?: any){
-      //   this.channel = pusher.subscribe(channelName);
-
-      //   this.channel.bind(this.channelEvent, (data:any) => {
-      //     if(data.type === 'message'){
-      //         const newMessage:MessageProps = {
-      //             id: (new Date().getTime()).toString(),
-      //             author: 'teste',
-      //             date: (new Date().getTime()).toString(),
-      //             text: data.message,
-      //             type: 'not-important'
-      //         }
-      //         this.messages.push(newMessage);
-      //     }
-
-      //     if(data.type === 'typing'){
-      //         this.showTyping = true
-      //     }
-
-      //     if(data.type === 'not-typing'){
-      //         this.showTyping = false
-      //     }
-      //   }); 
-      // }
+      
     }
     
   });

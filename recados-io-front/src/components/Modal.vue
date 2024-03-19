@@ -1,9 +1,9 @@
 <template>
-  <div class="modal">
+  <div class="modal" v-if="showModal">
     <div class="modal__wrapper">
       <div class="modal__wrapper__header">
         <h2 class="modal__wrapper__header__title">Novo recado</h2>
-        <button @click="$emit('setShow', false)">X</button>
+        <button @click="handleCloseModal">X</button>
       </div>
       <div class="modal__wrapper__content">
         <div>
@@ -40,21 +40,27 @@
 
 <script lang="ts">
 
-  import { defineComponent } from "vue";
+  import { computed, defineComponent } from "vue";
 
   import API from '@/config/api';
   import GPT from '@/config/gpt';
 
   import { MessageInterface } from '@/interfaces/message.interface';
   import { useRoute } from 'vue-router';
+  import { useStore } from "vuex";
 
   export default defineComponent({
     name: 'modal',
 
     setup() {
       const route = useRoute();
+      const store = useStore();
+      const showModal = computed(() => store.state.showModal);
+
       return {
         route,
+        $store: store,
+        showModal
       };
     },
     
@@ -68,10 +74,14 @@
         isLoading: false,
       }
     },
-    emits: ['setShow'],
+    emits: ['setShow', 'handleClientActions'],
     methods: {
-      async handleSubmit(){
 
+      handleCloseModal(){
+        this.$store.dispatch('handleShowModal', {showModal: false})
+      },
+
+      async handleSubmit(){
         const data:MessageInterface = {
           author: this.author,
           channel: `private-${this.$route.params.channel}`,
@@ -81,6 +91,8 @@
 
         try{
           const response = await API.post('/messages/new', data);
+          const message:MessageInterface = response.data;
+          this.$emit('handleClientActions', 'sendMessage', message);
         }catch(e){
           console.log(e)
         };
