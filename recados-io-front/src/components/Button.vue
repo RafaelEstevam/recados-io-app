@@ -1,8 +1,16 @@
 <template>
-  <button class="button" :class="variantColor" @click="$emit('buttonAction')">{{ label }}</button>
+  <button
+    class="button"
+    :type="type"
+    :class="variantColor"
+    @click="$emit('buttonAction')"
+  >
+    {{ label }}
+  </button>
 </template>
 
 <script lang="ts">
+
 import { defineComponent } from 'vue';
 
   export default defineComponent({
@@ -19,6 +27,12 @@ import { defineComponent } from 'vue';
       color: {
         type: String,
         required: true,
+      },
+      type: {
+        type: String,
+        required: true,
+        default: 'button',
+        validator: (value: string) => ['button', 'submit', 'reset'].includes(value),
       },
     },
     computed:{

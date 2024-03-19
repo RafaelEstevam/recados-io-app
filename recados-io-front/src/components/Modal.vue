@@ -19,6 +19,11 @@
             <textarea placeholder="Escreva seu recado" v-model="message" :disabled="message.length == 50"></textarea>
             <p>{{message.length}}/50</p>
           </div>
+
+          <div v-if="user.isAnonymous">
+            <p>Você está mandando uma mensagem anônima</p>
+            <p>Quer se identificar: <input type="checkbox" v-model="showUser" /></p>
+          </div>
           
         </div>
         <div v-if="acceptGptSuggestion" class="modal__wrapper__gpt__message">
@@ -53,28 +58,33 @@
     name: 'modal',
 
     setup() {
+
       const route = useRoute();
       const store = useStore();
       const showModal = computed(() => store.state.showModal);
+      const user = computed(() => store.state.user);
 
       return {
         route,
         $store: store,
-        showModal
+        showModal,
+        user
       };
     },
     
     data(){
       return {
-        author: '',
         message: '',
         gptMessage: '',
         messageType: 'not-important',
         acceptGptSuggestion: false,
         isLoading: false,
+        showUser: false,
       }
     },
+
     emits: ['setShow', 'handleClientActions'],
+    
     methods: {
 
       handleCloseModal(){
@@ -82,8 +92,9 @@
       },
 
       async handleSubmit(){
+
         const data:MessageInterface = {
-          author: this.author,
+          author: this.showUser ? this.user.userName : 'Anônimo',
           channel: `private-${this.$route.params.channel}`,
           text: this.message,
           type: this.messageType

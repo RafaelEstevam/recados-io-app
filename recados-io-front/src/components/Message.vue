@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts">
+
   import type { PropType } from 'vue';
   import { defineComponent } from 'vue';
   import API from '@/config/api';
@@ -23,6 +24,7 @@
 
   export default defineComponent({
     name: 'message',
+
     props: {
       message: {
         default:{id: '1', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
@@ -30,14 +32,19 @@
         type: Object as PropType<MessageInterface>,
       }
     },
+
     data(){
       return {
         messageType: 'primary'
       }
     },
+    
     mounted() {
       this.messageType = this.handleGetType();
     },
+
+    emits: ['handleGetMessagesByChannel'],
+
     methods:{
       handleGetType(){
         switch(this.message.type){
@@ -52,7 +59,7 @@
       async handleDeleteMessage(id?: string){
         try{
           const response = await API.delete(`/messages/delete/${id}`);
-          console.log(response);
+          this.$emit('handleGetMessagesByChannel');
         }catch(e){
           console.log(e);
         }

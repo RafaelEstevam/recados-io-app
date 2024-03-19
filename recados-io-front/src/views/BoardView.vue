@@ -3,9 +3,11 @@
     <headerComponent />
     <div class="board__messages">
       <div v-for="message in messages" :key="message._id">
-        <message :message="message" />
+        <message
+          :message="message"
+          @handleGetMessagesByChannel="handleGetMessagesByChannel"
+        />
       </div>
-      <button @click="setShow(true)">+ Add recado</button>
       <modal
         @handleClientActions="handleClientActions"
       />
@@ -60,9 +62,6 @@
     mounted(){
       this.handleGetMessagesByChannel();
       this.handleConnect();
-    },
-
-    created() {
     },
 
     methods: {

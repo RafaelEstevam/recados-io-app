@@ -1,28 +1,42 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue';
 import BoardView from '../views/BoardView.vue';
+import LoginView from '../views/LoginView.vue';
+import Page404View from '../views/404View.vue';
+import { getUserData } from '@/services/user';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    name: 'login',
+    component: LoginView
   },
   {
     path: '/board/:channel',
     name: 'board',
-    component: BoardView
+    component: BoardView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: '404',
+    component: Page404View,
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = getUserData();
+  if(to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated){
+    next('/')
+  }else{
+    next();
+  }
 })
 
 export default router

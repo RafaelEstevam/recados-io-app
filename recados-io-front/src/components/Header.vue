@@ -9,7 +9,7 @@
         @button-action="handleShowModal"
       />
       <div class="header__wrapper__logout">
-        <p class="header__wrapper__username">usuário</p>
+        <p class="header__wrapper__username">{{ user.userName }}</p>
         <buttonComponent
           :label="'Logout'"
           :variant="'outlined'"
@@ -20,21 +20,24 @@
     </div>
   </header>
 </template>
+
 <script lang="ts">
   import ButtonComponent from '@/components/Button.vue';
   import { useStore } from 'vuex';
-  import { defineComponent } from 'vue';
+  import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
     name: 'headerComponent',
     components: {
       ButtonComponent
     },
+
     setup(){
       const store = useStore();
-      
+      const user = computed(() => store.state.user);
       return {
-        $store: store
+        $store: store,
+        user
       }
     },
     methods: {
@@ -42,7 +45,8 @@
         this.$store.dispatch('handleShowModal', {showModal: true})
       },
       handleLogout(){
-        console.log('logout');
+        this.$store.dispatch('handleLogout');
+        this.$router.push(`/`);
       }
     }
   });
