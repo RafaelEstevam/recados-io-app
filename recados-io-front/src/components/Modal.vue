@@ -54,7 +54,7 @@
   import { useRoute } from 'vue-router';
   import { useStore } from "vuex";
 
-  import debounce from '@/utils/debounce'
+  import debounce from '@/utils/debounce';
 
   export default defineComponent({
     name: 'modal',
@@ -95,25 +95,7 @@
       handleCloseModal(){
         this.$store.dispatch('handleShowModal', {showModal: false})
       },
-
-      async handleSubmit(){
-
-        const data:MessageInterface = {
-          author: this.showUser ? this.user.userName : 'Anônimo',
-          channel: `private-${this.$route.params.channel}`,
-          text: this.message,
-          type: this.messageType
-        };
-
-        try{
-          const response = await API.post('/messages/new', data);
-          const message:MessageInterface = response.data;
-          this.$emit('handleClientActions', 'sendMessage', message);
-        }catch(e){
-          console.log(e)
-        };
-      },
-
+      
       handleAllowNotification(){
         this.userIsTyping = false;
       },
@@ -124,6 +106,22 @@
           this.userIsTyping = true;
         }
         debounce(this.notificationTime, this.handleAllowNotification);
+      },
+
+      async handleSubmit(){
+        const data:MessageInterface = {
+          author: this.showUser ? this.user.userName : 'Anônimo',
+          channel: `private-${this.$route.params.channel}`,
+          text: this.message,
+          type: this.messageType
+        };
+        try{
+          const response = await API.post('/messages/new', data);
+          const message:MessageInterface = response.data;
+          this.$emit('handleClientActions', 'sendMessage', message);
+        }catch(e){
+          console.log(e)
+        };
       },
 
       async handleSubmitToGPT(){
