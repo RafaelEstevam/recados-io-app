@@ -22,12 +22,14 @@
   import Modal from '@/components/Modal.vue';
   import API from '@/config/api';
   import pusher from '@/config/pusher';
+  import scrollDown from '@/utils/scrollDown'
+
   import { MessageInterface } from '@/interfaces/message.interface';
-import { UserInterface } from '@/interfaces/user.interface';
+  import { UserInterface } from '@/interfaces/user.interface';
 
   import { defineComponent, ref } from 'vue';
   import { useRoute } from 'vue-router';
-import { useToast } from 'vue-toast-notification';
+  import { useToast } from 'vue-toast-notification';
 
   export default defineComponent({
     name: 'board',
@@ -98,6 +100,8 @@ import { useToast } from 'vue-toast-notification';
             };
             
             this.messages.push(newMessage);
+            scrollDown();
+
           };
 
           if(data.type === 'typing'){
@@ -123,7 +127,6 @@ import { useToast } from 'vue-toast-notification';
           message,
           type: 'message'
         });
-
         await this.handleGetMessagesByChannel();
       },
 

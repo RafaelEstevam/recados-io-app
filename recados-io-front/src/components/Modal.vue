@@ -21,8 +21,8 @@
           </div>
 
           <div v-if="user.isAnonymous">
-            <p>Você está mandando uma mensagem anônima</p>
-            <p>Quer se identificar: <input type="checkbox" v-model="showUser" /></p>
+            <p>Você entrou como um usuário anônimo.</p>
+            <p>Quer se identificar no recado? <input type="checkbox" v-model="showUser" /></p>
           </div>
           
         </div>
@@ -83,7 +83,7 @@
         messageType: 'not-important',
         acceptGptSuggestion: false,
         isLoading: false,
-        showUser: false,
+        showUser: true,
         userIsTyping: false
       }
     },
