@@ -4,7 +4,7 @@ import {useToast} from 'vue-toast-notification';
 const $toast = useToast();
 
 const API = axios.create({
-  baseURL: 'http://localhost:8888',
+  baseURL: process.env.VUE_APP_API,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
