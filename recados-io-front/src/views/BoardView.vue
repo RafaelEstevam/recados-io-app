@@ -23,9 +23,11 @@
   import API from '@/config/api';
   import pusher from '@/config/pusher';
   import { MessageInterface } from '@/interfaces/message.interface';
+import { UserInterface } from '@/interfaces/user.interface';
 
   import { defineComponent, ref } from 'vue';
   import { useRoute } from 'vue-router';
+import { useToast } from 'vue-toast-notification';
 
   export default defineComponent({
     name: 'board',
@@ -36,6 +38,7 @@
     },
     
     setup() {
+      const $toast = useToast();
       const route = useRoute();
       const channelName = `private-${route.params.channel}`;
       const channel = pusher.subscribe(channelName);
@@ -98,25 +101,19 @@
           };
 
           if(data.type === 'typing'){
-            this.showTyping = true
+            this.$toast.info(`Usuário ${!data.isAnonymous ? data.userName : 'Anônimo'} está deixando um recado`);
           }
-
-          if(data.type === 'not-typing'){
-            this.showTyping = false
-          }
+          
         }); 
       },
 
-      handleClientActions(action:string, message:MessageInterface){
+      handleClientActions(action:string, data:any){
         switch(action){
           case 'typing':
-            this.handleClientTyping()
-            break;
-          case 'not-typing':
-            this.handleClientNotTyping()
+            this.handleClientTyping(data)
             break;
           default:
-            this.handleSendToChannel(message)
+            this.handleSendToChannel(data)
             break;
         }
       },
@@ -130,14 +127,16 @@
         await this.handleGetMessagesByChannel();
       },
 
-      handleClientTyping(){
-        this.channel.trigger(this.channelEvent, {channelName: this.channelName, id: '123', userName: 'teste', type: "typing"});
-      },
-
-      handleClientNotTyping(){
-        this.channel.trigger(this.channelEvent, {channelName: this.channelName, id: '123', userName: 'teste', type: "not-typing"});
+      handleClientTyping(data: UserInterface){
+        this.channel.trigger(this.channelEvent, {
+          channelName: this.channelName,
+          id: data.id,
+          userName: data.userName,
+          isAnonymous: data.isAnonymous ,
+          type: "typing"
+        });
       }
-      
+
     }
     
   });

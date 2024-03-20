@@ -52,6 +52,7 @@
   });
 
 </script>
+
 <style lang="scss" scoped>
   @import '@/styles/tokens.scss';
 

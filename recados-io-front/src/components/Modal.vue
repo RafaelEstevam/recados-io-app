@@ -16,7 +16,7 @@
             </select>
           </div>
           <div>
-            <textarea placeholder="Escreva seu recado" v-model="message" :disabled="message.length == 50"></textarea>
+            <textarea @keydown="handleIsTyping" placeholder="Escreva seu recado" v-model="message" :disabled="message.length == 50"></textarea>
             <p>{{message.length}}/50</p>
           </div>
 
@@ -32,7 +32,7 @@
       </div>
       <div class="modal__wrapper__footer">
         <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
-          <button @click="handleSubmit" :disabled="isLoading">Salvar recado</button>
+          <button @click="handleSubmitToGPT" :disabled="isLoading">Salvar recado</button>
         </div>
         <div v-else class="modal__wrapper__footer__buttons">
           <button @click="handleAcceptGPTcorrection">Aceitar correção e salvar</button>
@@ -54,11 +54,14 @@
   import { useRoute } from 'vue-router';
   import { useStore } from "vuex";
 
+  import debounce from '@/utils/debounce'
+
   export default defineComponent({
     name: 'modal',
 
     setup() {
 
+      const notificationTime = 2000;
       const route = useRoute();
       const store = useStore();
       const showModal = computed(() => store.state.showModal);
@@ -68,7 +71,8 @@
         route,
         $store: store,
         showModal,
-        user
+        user,
+        notificationTime
       };
     },
     
@@ -80,6 +84,7 @@
         acceptGptSuggestion: false,
         isLoading: false,
         showUser: false,
+        userIsTyping: false
       }
     },
 
@@ -101,20 +106,28 @@
         };
 
         try{
-
-          const response = await API.post('/messages/new/tes', data);
+          const response = await API.post('/messages/new', data);
           const message:MessageInterface = response.data;
           this.$emit('handleClientActions', 'sendMessage', message);
-          
         }catch(e){
           console.log(e)
         };
       },
 
+      handleAllowNotification(){
+        this.userIsTyping = false;
+      },
+
+      handleIsTyping(){
+        if(!this.userIsTyping){
+          this.$emit('handleClientActions', 'typing', this.user)
+          this.userIsTyping = true;
+        }
+        debounce(this.notificationTime, this.handleAllowNotification);
+      },
+
       async handleSubmitToGPT(){
-
         this.isLoading = true;
-
         const data = {
           model: "gpt-3.5-turbo",
           messages: [
@@ -124,7 +137,6 @@
           max_tokens: 56,
           temperature: 0.5
         }
-
         try{
           const gptResponse = await GPT.post('/chat/completions', data);
           this.acceptGptSuggestion = true;
