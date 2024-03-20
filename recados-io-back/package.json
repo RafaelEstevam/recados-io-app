@@ -18,6 +18,7 @@
     "@types/node": "^20.11.30",
     "env-cmd": "^10.1.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "vercel": "^33.6.1"
   }
 }
