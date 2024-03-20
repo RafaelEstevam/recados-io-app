@@ -32,7 +32,7 @@
       </div>
       <div class="modal__wrapper__footer">
         <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
-          <button @click="handleSubmitToGPT" :disabled="isLoading">Salvar recado</button>
+          <button @click="handleSubmit" :disabled="isLoading">Salvar recado</button>
         </div>
         <div v-else class="modal__wrapper__footer__buttons">
           <button @click="handleAcceptGPTcorrection">Aceitar correção e salvar</button>
@@ -101,9 +101,11 @@
         };
 
         try{
-          const response = await API.post('/messages/new', data);
+
+          const response = await API.post('/messages/new/tes', data);
           const message:MessageInterface = response.data;
           this.$emit('handleClientActions', 'sendMessage', message);
+          
         }catch(e){
           console.log(e)
         };

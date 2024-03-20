@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-  import ButtonComponent from '@/components/Button.vue';
+  import ButtonComponent from './Button.vue';
   import { useStore } from 'vuex';
   import { computed, defineComponent } from 'vue';
 

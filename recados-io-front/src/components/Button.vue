@@ -10,7 +10,6 @@
 </template>
 
 <script lang="ts">
-
 import { defineComponent } from 'vue';
 
   export default defineComponent({
@@ -36,7 +35,7 @@ import { defineComponent } from 'vue';
       },
     },
     computed:{
-      variantColor(){
+      variantColor():string {
         return `${this.variant} ${this.color}`
       }
     },

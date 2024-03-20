@@ -36,4 +36,8 @@ nav {
   width: 100%;
   min-height: 100vh;
 }
+
+.v-toast__text{
+  font-family: Avenir, Helvetica, Arial, sans-serif !important;
+}
 </style>
