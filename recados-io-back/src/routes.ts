@@ -15,23 +15,9 @@ routes.post('/pusher/auth', (req: Request, res: Response) => {
     res.send(auth);
 });
 
-// routes.post('/new-message', (req, res) => {
-//     const message = req.body;
-    
-//     pusher.trigger(message?.channel, "client-my-event", {
-//         message: message,
-//         type: 'message'
-//     });
-//     res.json({message: 'Mensagem enviada'});
-// });
-
-// routes.get('/messages', MessageController.getAll);
-routes.get('/messages/all', MessageController.getAllByChannelId);
-// routes.get('/messages/message/:id', MessageController.get);
-
+routes.get('/messages/all', MessageController.getAll);
+routes.patch('/messages/all', MessageController.getAllByChannelId);
 routes.post('/messages/new', MessageController.post);
-
-// routes.get('/messages/edit/:id', MessageController.update);
 routes.delete('/messages/delete/:id', MessageController.delete);
 
 export {routes};

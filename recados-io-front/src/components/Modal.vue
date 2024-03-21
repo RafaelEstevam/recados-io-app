@@ -116,7 +116,7 @@
           type: this.messageType
         };
         try{
-          const response = await API.post('/messages/new', data);
+          const response = await API.post('/tickets/new', data);
           const message:MessageInterface = response.data;
           this.$emit('handleClientActions', 'sendMessage', message);
         }catch(e){

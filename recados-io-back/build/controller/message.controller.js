@@ -25,8 +25,12 @@ exports.default = {
     },
     getAllByChannelId(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { channelId } = req.params;
-            const messages = yield message_schema_1.default.find({ channel: channelId });
+            const { channel, type } = req.body;
+            let query = { channel };
+            if (type !== 'undefined' && type !== '') {
+                query = Object.assign(Object.assign({}, query), { type });
+            }
+            const messages = yield message_schema_1.default.find(query);
             return res.json(messages);
         });
     },
