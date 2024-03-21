@@ -74,6 +74,10 @@
     cursor: pointer;
   }
 
+  input[type="checkbox"]:focus{
+    border-color: $secondary-color;
+  }
+
   input[type="checkbox"]:checked {
     background-color: $primary-color;
     border-color: $primary-color;
