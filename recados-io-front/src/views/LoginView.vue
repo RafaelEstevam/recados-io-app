@@ -1,10 +1,6 @@
 <template>
   <div class="login view">
-    <div class="login_image">
-      <div class="login__image__wrapper">
-        <Image />
-      </div>
-    </div>
+    
     <div class="login__wrapper">
       <div>
         <logo :white="true" :showSlogan="true"/>
@@ -41,6 +37,11 @@
             :type="'submit'"
           />
         </form>
+      </div>
+    </div>
+    <div class="login_image">
+      <div class="login__image__wrapper">
+        <Image />
       </div>
     </div>
   </div>
@@ -142,11 +143,17 @@
 
     @media(max-width: $screen-md){
       width: 10px;
+      padding: 0px;
+      background-color: $dark-color;
     }
   }
 
   .login__image__wrapper{
     width: 75%;
+    @media(max-width: $screen-md){
+      width: 0%;
+      display: none;
+    }
   }
   .login__wrapper{
     background: $primary-color;
