@@ -155,7 +155,7 @@
           message,
           type: 'message'
         });
-        await this.handleGetMessagesByChannel();
+        await this.handleGetMessagesByChannel('undefined');
       },
 
       handleClientTyping(data: UserInterface){

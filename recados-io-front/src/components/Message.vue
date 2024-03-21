@@ -112,7 +112,7 @@
       async handleDeleteMessage(id?: string){
         try{
           const response = await API.delete(`/messages/delete/${id}`);
-          this.$emit('handleGetMessagesByChannel');
+          this.$emit('handleGetMessagesByChannel', 'undefined');
         }catch(e){
           console.log(e);
         }
