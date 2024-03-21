@@ -7,7 +7,12 @@
     name: 'image',
     mounted(){
       document.addEventListener('DOMContentLoaded', function () {
-        window.setTimeout(document.querySelector('svg').classList.add('animated'),1000);
+        window.setTimeout( () => {
+          const svgElement = document.querySelector('svg');
+          if(svgElement){
+            svgElement.classList.add('animated')
+          }
+        },1000);
       })
     }
   }
