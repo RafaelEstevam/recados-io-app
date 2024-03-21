@@ -50,3 +50,16 @@ content-type: application/json
   "text": "Essa é uma mensagem do sistema. Mostrar ela na tela",
   "channel": "private-my-channel"
 }
+
+###
+
+POST https://recados-io-app.vercel.app/messages-all HTTP/1.1
+content-type: application/json
+
+{
+  "author": "Sistema",
+  "type": "important",
+  "date": "03-18-2024",
+  "text": "Essa é uma mensagem do sistema. Mostrar ela na tela",
+  "channel": "private-my-channel"
+}
