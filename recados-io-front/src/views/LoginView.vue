@@ -11,7 +11,6 @@
       </div>
       <div class="login__wrapper__content">
         <form @submit.prevent="handleSubmit" class="login__wrapper__content__form">
-          <!-- <input required name="userName" id="userName" v-model="userName" /> -->
           <inputComponent
             :inputName="userName"
             :placeholder="'Nome de usuário'"
