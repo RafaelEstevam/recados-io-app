@@ -35,7 +35,7 @@
         :label="`Todos`"
         :variant="'outlined'"
         :color="'dark'"
-        @button-action="handleFilter('')"
+        @button-action="handleFilter('undefined')"
       />
 
     </div>

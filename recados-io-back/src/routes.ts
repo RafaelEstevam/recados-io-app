@@ -27,7 +27,7 @@ routes.post('/new-message', (req, res) => {
 });
 
 routes.get('/messages', MessageController.getAll);
-routes.get('/messages/all/:channelId', MessageController.getAllByChannelId);
+routes.get('/messages/all/:channelId/:type', MessageController.getAllByChannelId);
 routes.get('/messages/message/:id', MessageController.get);
 
 routes.post('/messages/new', MessageController.post);

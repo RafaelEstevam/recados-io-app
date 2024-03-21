@@ -79,7 +79,7 @@
     },
     
     mounted(){
-      this.handleGetMessagesByChannel();
+      this.handleGetMessagesByChannel('undefined');
       this.handleConnect();
     },
 
@@ -99,7 +99,7 @@
 
       async handleGetMessagesByChannel(filter:string){
         try{
-          const response = await API.get(`/messages/all/private-${this.$route.params.channel}?filter=${filter}`);
+          const response = await API.get(`/messages/all/private-${this.$route.params.channel}/${filter}`);
           this.messages = response.data;
         }catch(e){
           console.log(e)
