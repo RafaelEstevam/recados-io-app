@@ -1,6 +1,8 @@
 <template>
   <button
     class="button"
+    :id="id"
+    :size="size"
     :type="type"
     :class="variantColor"
     @click="$emit('buttonAction')"
@@ -15,6 +17,14 @@ import { defineComponent } from 'vue';
   export default defineComponent({
     name: 'buttonComponent',
     props: {
+      id: {
+        type: String,
+        required: true,
+      },
+      size: {
+        type: String,
+        default: 'md',
+      },
       label: {
         type: String,
         required: true,
@@ -27,6 +37,10 @@ import { defineComponent } from 'vue';
         type: String,
         required: true,
       },
+      fullwidth: {
+        type: Boolean,
+        default: false,
+      },
       type: {
         type: String,
         required: true,
@@ -36,7 +50,7 @@ import { defineComponent } from 'vue';
     },
     computed:{
       variantColor():string {
-        return `${this.variant} ${this.color}`
+        return `${this.variant} ${this.color} ${this.size} ${this.fullwidth && 'fullWidth'}`
       }
     },
     emits: ['buttonAction']
@@ -72,6 +86,10 @@ import { defineComponent } from 'vue';
       &.danger{
         background-color: $danger-color;
       }
+
+      &.dark{
+        background-color: $dark-color;
+      }
     }
 
     &.outlined{
@@ -84,13 +102,25 @@ import { defineComponent } from 'vue';
       &.secondary{
         border-color: $secondary-color;
         color: $secondary-color;
-
       }
       &.danger{
         border-color: $danger-color;
         color: $danger-color;
-
       }
+
+      &.dark{
+        border-color: $dark-color;
+        color: $dark-color;
+      }
+    }
+
+    &.sm{
+      padding: $spacing-sm;
+      font-size: $font-sm;
+    }
+
+    &.fullWidth{
+      width: 100%;
     }
 
   }

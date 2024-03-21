@@ -14,7 +14,15 @@ export default {
 
     async getAllByChannelId(req: Request, res: Response){
         const {channelId} = req.params;
-        const messages = await Message.find({channel: channelId});
+        const {filter} = req.query;
+
+        let query = {channel: channelId};
+
+        if(filter !== 'undefined' && filter !== ''){
+            query = {...query, ...{type: filter}}
+        }
+
+        const messages = await Message.find(query);
         return res.json(messages)
     },
     

@@ -155,14 +155,13 @@
 <style lang="scss" scoped>
   @import '@/styles/tokens.scss';
   .modal{
-    position: absolute;
+    position: fixed;
     z-index: 10;
     left: 0;
     top: 0;
     width: 100%;
     min-height: 100vh;
     background-color: #00000060;
-    // backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     justify-content: center;

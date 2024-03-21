@@ -35,6 +35,7 @@
             :color="'primary'"
             :variant="'filled'"
             :type="'submit'"
+            :id="'login-submit'"
           />
         </form>
       </div>
