@@ -46,7 +46,7 @@ import { defineComponent } from 'vue';
 <style lang="scss" scoped>
   .button{
     border: 0px;
-    padding: $spacing-sm $spacing-md;
+    padding: $spacing-md $spacing-md;
     color: $white-color;
     font-weight: bold;
     border-radius: $spacing-md;
