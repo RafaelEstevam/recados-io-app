@@ -5,7 +5,6 @@ import { pusher } from './pusher';
 const routes = Router();
 
 routes.get('/', (req: Request, res: Response) => {
-    console.log(req);
     res.send({message: 'Hello world' })
 });
 
@@ -16,15 +15,15 @@ routes.post('/pusher/auth', (req: Request, res: Response) => {
     res.send(auth);
 });
 
-routes.post('/new-message', (req, res) => {
-    const message = req.body;
+// routes.post('/new-message', (req, res) => {
+//     const message = req.body;
     
-    pusher.trigger(message?.channel, "client-my-event", {
-        message: message,
-        type: 'message'
-    });
-    res.json({message: 'Mensagem enviada'});
-});
+//     pusher.trigger(message?.channel, "client-my-event", {
+//         message: message,
+//         type: 'message'
+//     });
+//     res.json({message: 'Mensagem enviada'});
+// });
 
 routes.get('/messages', MessageController.getAll);
 routes.get('/messages/message/:id', MessageController.get);
