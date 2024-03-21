@@ -13,7 +13,7 @@ export default {
     },
 
     async getAllByChannelId(req: Request, res: Response){
-        const {channel, type} = req.body;
+        const {channel, type} = req.query;
         let query = {channel};
 
         if(type !== 'undefined' && type !== ''){

@@ -53,10 +53,5 @@ content-type: application/json
 
 ###
 
-PATCH http://localhost:8888/messages/all
+GET http://localhost:8888/messages/all?channel=private-meu-mural&type=not-important
 content-type: application/json
-
-{
-  "type": "urgent",
-  "channel": "private-meu-mural"
-}

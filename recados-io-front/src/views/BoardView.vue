@@ -99,13 +99,13 @@
 
       async handleGetMessagesByChannel(filter:string){
 
-        const data = {
-          channel: this.channelName,
-          type: filter
-        };
+        // const data = {
+        //   channel: this.channelName,
+        //   type: filter
+        // };
 
         try{
-          const response = await API.patch(`/messages/all`, data);
+          const response = await API.get(`/messages/all?channel=${this.channelName}&type=${filter}`);
           this.messages = response.data;
         }catch(e){
           console.log(e)
