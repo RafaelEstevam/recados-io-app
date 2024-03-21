@@ -105,7 +105,7 @@
         };
 
         try{
-          const response = await API.post(`/messages/all`, data);
+          const response = await API.post(`/messages-all`, data);
           this.messages = response.data;
         }catch(e){
           console.log(e)
