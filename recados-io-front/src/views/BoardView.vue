@@ -98,8 +98,14 @@
       },
 
       async handleGetMessagesByChannel(filter:string){
+
+        const data = {
+          channel: this.channelName,
+          type: filter
+        };
+
         try{
-          const response = await API.get(`/messages/all/private-${this.$route.params.channel}/${filter}`);
+          const response = await API.post(`/messages/all`, data);
           this.messages = response.data;
         }catch(e){
           console.log(e)
