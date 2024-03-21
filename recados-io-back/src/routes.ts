@@ -25,9 +25,9 @@ routes.post('/pusher/auth', (req: Request, res: Response) => {
 //     res.json({message: 'Mensagem enviada'});
 // });
 
-routes.get('/messages', MessageController.getAll);
-routes.get('/messages/message/:id', MessageController.get);
-routes.patch('/messages/all', MessageController.getAllByChannelId);
+// routes.get('/messages', MessageController.getAll);
+routes.get('/messages/all', MessageController.getAllByChannelId);
+// routes.get('/messages/message/:id', MessageController.get);
 
 routes.post('/messages/new', MessageController.post);
 
