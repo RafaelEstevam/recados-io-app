@@ -21,8 +21,7 @@ export default {
         }
 
         const messages = await Message.find(query);
-
-        return res.json(messages)
+        return res.send(messages)
     },
     
     async post(req: Request, res: Response) {
