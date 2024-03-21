@@ -105,7 +105,7 @@
         };
 
         try{
-          const response = await API.patch(`/messages-all`, data);
+          const response = await API.patch(`/messages/all`, data);
           this.messages = response.data;
         }catch(e){
           console.log(e)

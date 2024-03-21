@@ -13,16 +13,14 @@ export default {
     },
 
     async getAllByChannelId(req: Request, res: Response){
-        // const {channel, type} = req.body;
-        // let query = {channel};
+        const {channel, type} = req.body;
+        let query = {channel};
 
-        // if(type !== 'undefined' && type !== ''){
-        //     query = {...query, ...{type}}
-        // }
+        if(type !== 'undefined' && type !== ''){
+            query = {...query, ...{type}}
+        }
 
-        // const messages = await Message.find(query);
-        // return res.json(messages)
-        const messages = await Message.find();
+        const messages = await Message.find(query);
         return res.json(messages)
     },
     
