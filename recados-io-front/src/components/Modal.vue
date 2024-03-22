@@ -137,7 +137,13 @@
     },
 
     emits: ['setShow', 'handleClientActions'],
-    
+
+    watch: {
+      message(){
+        this.handleIsTyping();
+      }
+    },
+
     methods: {
 
       handleCloseModal(){
