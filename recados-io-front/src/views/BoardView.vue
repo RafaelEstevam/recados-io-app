@@ -19,9 +19,14 @@
       />
       <h2 v-else class="board__title">Sem recados neste mural.</h2>
     </div>
+
     <modal
-      @handleClientActions="handleClientActions"
-    />
+      :modalTitle="'Novo recado'"
+      :showModal="showModal"
+      @closeModal="handleCloseModal"
+    >
+      <addMessage @handleClientActions="handleClientActions"/>
+    </modal>
 
   </div>
 </template>
@@ -34,35 +39,45 @@
 
   import HeaderComponent from '@/components/Header.vue';
   import Message from '@/components/Message.vue';
-  import Modal from '@/components/Modal.vue';
+  import Modal from '@/components/Modal-v2.vue';
   import ButtonComponent from '@/components/Button.vue';
   import Filter from '@/components/Filter.vue';
+
+  import AddMessage from '@/modules/AddMessage.vue';
 
   import { MessageInterface } from '@/interfaces/message.interface';
   import { UserInterface } from '@/interfaces/user.interface';
 
-  import { defineComponent, ref } from 'vue';
+  import { computed, defineComponent, ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import { useStore } from 'vuex';
+  
 
   export default defineComponent({
     name: 'board',
     components: {
-      HeaderComponent,
-      ButtonComponent,
-      Filter,
-      Message,
-      Modal
-    },
+    HeaderComponent,
+    ButtonComponent,
+    Filter,
+    Message,
+    Modal,
+    AddMessage
+  },
     
     setup() {
+      const store = useStore();
       const route = useRoute();
+
       const channelName = `private-${route.params.channel}`;
       const channel = pusher.subscribe(channelName);
       const channelEvent = 'client-my-event';
-
+      
+      const showModal = computed(() => store.state.showModal)
 
       return {
+        $store: store,
         route,
+        showModal,
         channelEvent,
         channelName,
         channel,
@@ -70,7 +85,6 @@
     },
 
     data(): any{
-
       return {
         messages: new Array<MessageInterface>(),
         auth: '',
@@ -191,6 +205,10 @@
         this.channel.trigger(this.channelEvent, {
           type: "list-updated"
         })
+      },
+
+      handleCloseModal(){
+        this.$store.dispatch('handleShowModal', {showModal: false})
       }
 
     },
