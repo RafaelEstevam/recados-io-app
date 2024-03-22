@@ -100,6 +100,8 @@
 
       async handleGetMessagesByChannel(filter:string){
 
+        this.$store.dispatch('handleShowLoading', {showLoading: true});
+
         const data = {
           channel: this.channelName,
           type: filter
@@ -110,6 +112,8 @@
           this.messages = response.data;
         }catch(e){
           console.log(e)
+        }finally{
+          this.$store.dispatch('handleShowLoading', {showLoading: false});
         }
       },
 

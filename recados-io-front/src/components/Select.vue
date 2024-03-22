@@ -8,7 +8,7 @@
       @input="$emit('update:modelValue', $event.target.value)"
       class="select__field"
     >
-      <option>Selecione uma prioridade</option>
+      <option value="">Selecione uma prioridade</option>
       <option value="not-important">Normal</option>
       <option value="important">Importante</option>
       <option value="urgent">Urgente</option>

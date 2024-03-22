@@ -41,6 +41,7 @@
   import {MessageInterface} from '@/interfaces/message.interface';
 
   import ButtonComponent from './Button.vue';
+import { useStore } from 'vuex';
 
   export default defineComponent({
     name: 'message',
@@ -52,6 +53,13 @@
         default:{id: '1', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
         required: true,
         type: Object as PropType<MessageInterface>,
+      }
+    },
+
+    setup(){
+      const store = useStore();
+      return {
+        $store: store
       }
     },
 
@@ -73,7 +81,6 @@
       },
 
       tag():string{
-        console.log();
         switch(this?.message.type){
           case 'urgent':
             return 'Urgente'
@@ -95,7 +102,6 @@
     methods:{
 
       buttonAction(){
-        console.log('teste');
         this.handleDeleteMessage(this.message._id)
       },
 
@@ -110,11 +116,14 @@
         }
       },
       async handleDeleteMessage(id?: string){
+        this.$store.dispatch('handleShowLoading', {showLoading: true});
         try{
           const response = await API.delete(`/messages/delete/${id}`);
           this.$emit('handleGetMessagesByChannel', 'undefined');
         }catch(e){
           console.log(e);
+        }finally{
+          this.$store.dispatch('handleShowLoading', {showLoading: false});
         }
       }
     }

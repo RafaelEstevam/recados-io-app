@@ -51,7 +51,7 @@
         </div>
 
         <div v-if="acceptGptSuggestion" class="modal__wrapper__gpt__message">
-          <p><span>Corrigido com IA:</span> {{ gptMessage }}</p>
+          <p class="modal__wrapper__gpt__message__text"><span>Corrigido com IA:</span> {{ gptMessage }}</p>
           <buttonComponent
             :id="'button-modal'"
             :label="`Aceitar correção e salvar`"
@@ -72,42 +72,7 @@
             @button-action="handleSubmit"
           />
         </div>
-
-        <!-- <div> -->
-          <!-- <div>
-            <select v-model="messageType">
-              <option>Selecione uma prioridade</option>
-              <option value="not-important">Normal</option>
-              <option value="important">Importante</option>
-              <option value="urgent">Urgente</option>
-            </select>
-          </div> -->
-          
-
-          <!-- <div>
-            <textarea @keydown="handleIsTyping" placeholder="Escreva seu recado" v-model="message" :disabled="message.length == 50"></textarea>
-            <p>{{message.length}}/50</p>
-          </div> -->
-          
-          
-          
-
-          <!-- <div v-if="user.isAnonymous">
-            <p>Você entrou como um usuário anônimo.</p>
-            <p>Quer se identificar no recado? <input type="checkbox" v-model="showUser" /></p>
-          </div> -->
-
-          
-
-          <!-- <div class="modal__wrapper__footer">
-            <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
-              <button @click="handleSubmit" :disabled="isLoading">Salvar recado</button>
-            </div>
-            <div v-else class="modal__wrapper__footer__buttons">
-              <button @click="handleSubmit">Salvar sem correção</button>
-            </div>
-          </div> -->
-        <!-- </div> -->
+        
       </div>
     </div>
   </div>
@@ -163,7 +128,7 @@
       return {
         message: '',
         gptMessage: '',
-        messageType: 'not-important',
+        messageType: '',
         acceptGptSuggestion: false,
         isLoading: false,
         showUser: true,
@@ -176,6 +141,7 @@
     methods: {
 
       handleCloseModal(){
+        this.handleResetModal();
         this.$store.dispatch('handleShowModal', {showModal: false})
       },
       
@@ -191,7 +157,19 @@
         debounce(this.notificationTime, this.handleAllowNotification);
       },
 
+      handleResetModal(){
+        this.message = '',
+        this.gptMessage = '',
+        this.messageType = '',
+        this.acceptGptSuggestion = false,
+        this.isLoading = false,
+        this.showUser = true,
+        this.userIsTyping = false
+      },
+
       async handleSubmit(){
+        this.$store.dispatch('handleShowLoading', {showLoading: true});
+        
         const data:MessageInterface = {
           author: this.showUser ? this.user.userName : 'Anônimo',
           channel: `private-${this.$route.params.channel}`,
@@ -203,13 +181,16 @@
           const response = await API.post('/messages/new', data);
           const message:MessageInterface = response.data;
           this.$emit('handleClientActions', 'sendMessage', message);
+          this.handleCloseModal();
         }catch(e){
           console.log(e)
-        };
+        }finally{
+          this.$store.dispatch('handleShowLoading', {showLoading: false});
+        }
       },
 
       async handleSubmitToGPT(){
-        this.isLoading = true;
+        this.$store.dispatch('handleShowLoading', {showLoading: true});
         const data = {
           model: "gpt-3.5-turbo",
           messages: [
@@ -225,6 +206,8 @@
           this.gptMessage = gptResponse.data.choices[0].message.content;
         }catch(e){
           console.log(e)
+        }finally{
+          this.$store.dispatch('handleShowLoading', {showLoading: false});
         }
       },
 
@@ -236,7 +219,11 @@
       updateCheckBox(value:boolean){
         this.showUser = value;
       },
-    }
+    },
+
+    destroyed() {
+      this.handleResetModal()
+    },
   })
 </script>
 
@@ -288,6 +275,13 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-md;
+  }
+
+  .modal__wrapper__gpt__message__text{
+    color: $dark-color;
+    span{
+      color: $secondary-color;
+    }
   }
 
   .modal__wrapper__header__title{

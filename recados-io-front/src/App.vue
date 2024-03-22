@@ -1,6 +1,19 @@
 <template>
+  <Loading :isFullScreen="true"/>
   <router-view/>
 </template>
+
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import Loading from '@/components/Loading.vue'
+
+  export default defineComponent({
+    name: 'app',
+    components: {
+      Loading
+    }
+  })
+</script>
 
 <style lang="scss">
 
