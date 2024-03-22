@@ -47,7 +47,7 @@
             :color="'primary'"
             :fullwidth="true"
             :disabled="message.length <= 3"
-            @button-action="handleSubmit"
+            @button-action="handleSubmitToGPT"
           />
         </div>
 
