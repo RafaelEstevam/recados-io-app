@@ -64,19 +64,19 @@
 <script lang="ts">
   import { defineComponent, computed, defineAsyncComponent } from "vue";
 
-  import API from '../config/api';
-  import GPT from '../config/gpt';
+  import { postToGPT } from '@/services/gpt';
+  import { postMessage } from '@/services/message';
 
-  import { MessageInterface } from '../interfaces/message.interface';
+  import { MessageInterface } from '@/interfaces/message.interface';
   import { useRoute } from 'vue-router';
   import { useStore } from "vuex";
 
-  import debounce from '../utils/debounce';
+  import debounce from '@/utils/debounce';
 
-  import ButtonComponent from '../components/Button.vue';
-  import SelectComponent from '../components/Select.vue';
-  import TextareaComponent from '../components/Textarea.vue';
-  import CheckboxComponent from '../components/Checkbox.vue';
+  import ButtonComponent from '@/components/Button.vue';
+  import SelectComponent from '@/components/Select.vue';
+  import TextareaComponent from '@/components/Textarea.vue';
+  import CheckboxComponent from '@/components/Checkbox.vue';
 
   export default defineComponent({
     name: 'addMessage',
@@ -156,49 +156,38 @@
         this.userIsTyping = false
       },
 
+      handleSubmitCallback(message: MessageInterface){
+        this.$emit('handleClientActions', 'sendMessage', message);
+        this.handleCloseModal();
+      },
+
       async handleSubmit(){
         this.$store.dispatch('handleShowLoading', {showLoading: true});
+        const channelRoute = `${this.$route.params.channel}`;
         
-        const data:MessageInterface = {
-          author: this.showUser ? this.user.userName : 'Anônimo',
-          channel: `private-${this.$route.params.channel}`,
-          text: this.message,
-          type: this.messageType
-        };
+        postMessage(
+          this.showUser,
+          this.user,
+          channelRoute,
+          this.message,
+          this.messageType,
+          this.handleSubmitCallback,
+          this.handleFinishinRequest
+        );
+      },
 
-        try{
-          const response = await API.post('/messages/new', data);
-          const message:MessageInterface = response.data;
-          this.$emit('handleClientActions', 'sendMessage', message);
-          this.handleCloseModal();
-        }catch(e){
-          console.log(e)
-        }finally{
-          this.$store.dispatch('handleShowLoading', {showLoading: false});
-        }
+      handleShowGptSuggestion(gptResponse?:any){
+        this.acceptGptSuggestion = true;
+        this.gptMessage = gptResponse.data.choices[0].message.content;
+      },
 
+      handleFinishinRequest(){
+        this.$store.dispatch('handleShowLoading', {showLoading: false});
       },
 
       async handleSubmitToGPT(){
         this.$store.dispatch('handleShowLoading', {showLoading: true});
-        const data = {
-          model: "gpt-3.5-turbo",
-          messages: [
-            {role: "user",
-            content: `Corriga somente a ortografia da seguinte sentença: ${this.message.replace(/(\r\n|\n|\r)/gm, " ")}. Sem alterar o sentido da frase.`}
-          ],
-          max_tokens: 56,
-          temperature: 0.5
-        }
-        try{
-          const gptResponse = await GPT.post('/chat/completions', data);
-          this.acceptGptSuggestion = true;
-          this.gptMessage = gptResponse.data.choices[0].message.content;
-        }catch(e){
-          console.log(e)
-        }finally{
-          this.$store.dispatch('handleShowLoading', {showLoading: false});
-        }
+        postToGPT(this.message, this.handleShowGptSuggestion, this.handleFinishinRequest);
       },
 
       async handleAcceptGPTcorrection(){
