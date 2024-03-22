@@ -1,8 +1,11 @@
 function debounce(time: number, callback: any){
-  let interval: number;
-  interval = setTimeout(() => {
-    callback();
-  }, time);
+  let interval: ReturnType<typeof setTimeout>;
+  return () => {
+    clearInterval(interval);
+    interval = setTimeout(() => {
+      callback();
+    }, time);
+  }
 }
 
 export default debounce;

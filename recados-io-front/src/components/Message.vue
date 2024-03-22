@@ -41,7 +41,7 @@
   import {MessageInterface} from '@/interfaces/message.interface';
 
   import ButtonComponent from './Button.vue';
-import { useStore } from 'vuex';
+  import { useStore } from 'vuex';
 
   export default defineComponent({
     name: 'message',
@@ -97,7 +97,7 @@ import { useStore } from 'vuex';
       }
     },
 
-    emits: ['handleGetMessagesByChannel', 'buttonAction'],
+    emits: ['handleGetMessagesByChannel', 'handleRefreshMessagesListOfChannel', 'buttonAction'],
 
     methods:{
 
@@ -119,6 +119,7 @@ import { useStore } from 'vuex';
         this.$store.dispatch('handleShowLoading', {showLoading: true});
         try{
           const response = await API.delete(`/messages/delete/${id}`);
+          this.$emit('handleRefreshMessagesListOfChannel');
           this.$emit('handleGetMessagesByChannel', 'undefined');
         }catch(e){
           console.log(e);

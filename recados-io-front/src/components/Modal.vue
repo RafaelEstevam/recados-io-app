@@ -29,7 +29,7 @@
           v-model="message"
         />
 
-        <div v-if="user.isAnonymous" class="modal__checkbox__wrapper">
+        <div v-if="anonyousUser" class="modal__checkbox__wrapper">
           <p>Você entrou como um usuário anônimo.</p>
           <checkboxComponent
             :inputName="showUser"
@@ -46,7 +46,8 @@
             :variant="'filled'"
             :color="'primary'"
             :fullwidth="true"
-            @button-action="handleSubmitToGPT"
+            :disabled="message.length <= 3"
+            @button-action="handleSubmit"
           />
         </div>
 
@@ -109,29 +110,32 @@
 
     setup() {
 
-      const notificationTime = 2000;
+      const notificationTime = 5000;
       const route = useRoute();
       const store = useStore();
       const showModal = computed(() => store.state.showModal);
       const user = computed(() => store.state.user);
+      const anonyousUser = user.value.isAnonymous;
 
       return {
         route,
         $store: store,
         showModal,
         user,
+        anonyousUser,
         notificationTime
       };
     },
     
     data(){
+
       return {
         message: '',
         gptMessage: '',
         messageType: '',
         acceptGptSuggestion: false,
         isLoading: false,
-        showUser: true,
+        showUser: !this.anonyousUser,
         userIsTyping: false
       }
     },
@@ -141,7 +145,7 @@
     watch: {
       message(){
         this.handleIsTyping();
-      }
+      },
     },
 
     methods: {
@@ -159,8 +163,8 @@
         if(!this.userIsTyping){
           this.$emit('handleClientActions', 'typing', this.user)
           this.userIsTyping = true;
+          debounce(this.notificationTime, this.handleAllowNotification)();
         }
-        debounce(this.notificationTime, this.handleAllowNotification);
       },
 
       handleResetModal(){
@@ -169,7 +173,7 @@
         this.messageType = '',
         this.acceptGptSuggestion = false,
         this.isLoading = false,
-        this.showUser = true,
+        this.showUser = !this.anonyousUser,
         this.userIsTyping = false
       },
 
@@ -193,6 +197,7 @@
         }finally{
           this.$store.dispatch('handleShowLoading', {showLoading: false});
         }
+
       },
 
       async handleSubmitToGPT(){

@@ -4,6 +4,7 @@
 
     <Filter
       :messages="messages.length"
+      :connectedUsers="connectedUsers"
       @filterAction="handleFilter"
     />
     
@@ -14,6 +15,7 @@
         v-if="messages.length > 0"
         v-for="message in messages"
         @handleGetMessagesByChannel="handleGetMessagesByChannel"
+        @handleRefreshMessagesListOfChannel="handleRefreshMessagesListOfChannel"
       />
       <h2 v-else class="board__title">Sem recados neste mural.</h2>
     </div>
@@ -58,6 +60,7 @@
       const channel = pusher.subscribe(channelName);
       const channelEvent = 'client-my-event';
 
+
       return {
         route,
         channelEvent,
@@ -76,6 +79,7 @@
         important: 0,
         urgent: 0,
         normal: 0,
+        connectedUsers: 0
       }
     },
     
@@ -119,9 +123,8 @@
 
       handleConnect(){
         this.channel = pusher.subscribe(this.channelName);
-
+        
         this.channel.bind(this.channelEvent, (data:any) => {
-
           if(data.type === 'message'){
             const newMessage:MessageInterface = {
               _id: data.message._id,
@@ -134,14 +137,21 @@
             
             this.messages.push(newMessage);
             scrollDown();
-
           };
 
           if(data.type === 'typing'){
             this.$toast.info(`Usuário ${!data.isAnonymous ? data.userName : 'Anônimo'} está deixando um recado`);
           }
+
+          if(data.type === 'list-updated'){
+            this.handleGetMessagesByChannel('undefined');
+          }
           
-        }); 
+        });
+
+        this.channel.bind('pusher:subscription_count', (data: any) => {
+          this.connectedUsers = data.subscription_count;
+        })
       },
 
       handleClientActions(action:string, data:any){
@@ -175,8 +185,18 @@
 
       handleFilter(filter:string){
         this.handleGetMessagesByChannel(filter);
+      },
+
+      handleRefreshMessagesListOfChannel(){
+        this.channel.trigger(this.channelEvent, {
+          type: "list-updated"
+        })
       }
 
+    },
+
+    beforeRouteLeave(){
+      pusher.unsubscribe(this.channelName);
     }
     
   });

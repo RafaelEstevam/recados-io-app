@@ -1,10 +1,10 @@
 <template>
   <div class="filter">
     <h2 class="filter__title">Recados no quadro ({{ messages }})</h2>
-    
-    <p>Filtrar por: </p>
 
     <div class="filter__buttons">
+
+      <p>Filtrar por: </p>
 
       <buttonComponent
         :id="'button-modal'"
@@ -39,6 +39,9 @@
       />
 
     </div>
+
+    <p>Usuários conectados: {{ connectedUsers }}</p>
+
   </div>
 </template>
 
@@ -56,6 +59,10 @@
       messages:{
         type: Number,
         required: true
+      },
+      connectedUsers: {
+        type: Number,
+        default: 0
       }
     },
 
@@ -76,6 +83,7 @@
   .filter{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: $spacing-md;
     padding: $spacing-md $spacing-xxl;
     background: $white-color;
@@ -88,21 +96,9 @@
     text-align: left;
   }
 
-  .filter__messages{
-    width: 100%;
-    padding: 0 $spacing-xxl $spacing-xxl;
-    display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-lg;
-
-    .filter__title{
-      text-align: center;
-      width: 100%;
-    }
-  }
-
   .filter__buttons{
     display: flex;
+    align-items: center;
     gap: $spacing-md;
 
     @media(max-width: $screen-sm){

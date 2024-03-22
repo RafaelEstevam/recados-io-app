@@ -123,5 +123,10 @@ import { defineComponent } from 'vue';
       width: 100%;
     }
 
+    &[disabled]{
+      background-color: $light-color !important;
+      cursor: not-allowed;
+    }
+
   }
 </style>
