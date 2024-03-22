@@ -21,14 +21,38 @@ const postMessage = async (showUser: boolean, user: UserInterface, channel: stri
   }
 };
 
-const getMessages = async () => {
+const getMessages = async (channelName: string, filter: string, finishCallback: Function) => {
+  const data = {
+    channel: channelName,
+    type: filter
+  };
 
+  try{
+    const response = await API.post(`/messages/all`, data);
+    return response.data;
+  }catch(e){
+    console.log(e)
+  }finally{
+    finishCallback()
+  }
 };
 
-const deleteMessage = async () => {
-
+const deleteMessage = async (callback: Function, finishCallback: Function, id?: string) => {
+  try{
+    const response = await API.delete(`/messages/delete/${id}`);
+    callback()
+    // this.$emit('handleRefreshMessagesListOfChannel');
+    // this.$emit('handleGetMessagesByChannel', 'undefined');
+  }catch(e){
+    console.log(e);
+  }finally{
+    finishCallback()
+    // this.$store.dispatch('handleShowLoading', {showLoading: false});
+  }
 }
 
 export {
-  postMessage
+  postMessage,
+  getMessages,
+  deleteMessage
 };

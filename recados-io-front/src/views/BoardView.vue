@@ -33,7 +33,15 @@
 
 <script lang="ts">
 
-  import API from '@/config/api';
+  import { getMessages } from '@/services/message';
+  import { MessageInterface } from '@/interfaces/message.interface';
+  import { UserInterface } from '@/interfaces/user.interface';
+
+  import { computed, defineComponent } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { useStore } from 'vuex';
+
+  // import API from '@/config/api';
   import pusher from '@/config/pusher';
   import scrollDown from '@/utils/scrollDown';
 
@@ -44,14 +52,6 @@
   import Filter from '@/components/Filter.vue';
 
   import AddMessage from '@/modules/AddMessage.vue';
-
-  import { MessageInterface } from '@/interfaces/message.interface';
-  import { UserInterface } from '@/interfaces/user.interface';
-
-  import { computed, defineComponent, ref } from 'vue';
-  import { useRoute } from 'vue-router';
-  import { useStore } from 'vuex';
-  
 
   export default defineComponent({
     name: 'board',
@@ -117,22 +117,8 @@
       },
 
       async handleGetMessagesByChannel(filter:string){
-
         this.$store.dispatch('handleShowLoading', {showLoading: true});
-
-        const data = {
-          channel: this.channelName,
-          type: filter
-        };
-
-        try{
-          const response = await API.post(`/messages/all`, data);
-          this.messages = response.data;
-        }catch(e){
-          console.log(e)
-        }finally{
-          this.$store.dispatch('handleShowLoading', {showLoading: false});
-        }
+        this.messages = await getMessages(this.channelName, filter, this.handleFinishinRequest);
       },
 
       handleConnect(){
@@ -140,6 +126,7 @@
         
         this.channel.bind(this.channelEvent, (data:any) => {
           if(data.type === 'message'){
+
             const newMessage:MessageInterface = {
               _id: data.message._id,
               author: data.message.author,
@@ -209,7 +196,11 @@
 
       handleCloseModal(){
         this.$store.dispatch('handleShowModal', {showModal: false})
-      }
+      },
+
+      handleFinishinRequest(){
+        this.$store.dispatch('handleShowLoading', {showLoading: false});
+      },
 
     },
 

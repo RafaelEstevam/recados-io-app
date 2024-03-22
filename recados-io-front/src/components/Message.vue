@@ -10,7 +10,7 @@
         :variant="'filled'"
         :type="'submit'"
         :size="'sm'"
-        @buttonAction="buttonAction"
+        @buttonAction="handleDeleteMessage(message._id)"
       />
     </div>
     
@@ -32,16 +32,19 @@
 
 <script lang="ts">
 
-  import API from '@/config/api';
-  import moment from 'moment';
-  import isNewMessage from '@/utils/isNewMessage';
-
   import type { PropType } from 'vue';
   import { defineComponent } from 'vue';
   import {MessageInterface} from '@/interfaces/message.interface';
+  import { deleteMessage } from '@/services/message';
+  import { useStore } from 'vuex';
+
+  import moment from 'moment';
+
+  import isNewMessage from '@/utils/isNewMessage';
+  import defineType from '@/utils/defineType';
+  import translateType from '@/utils/translateType';
 
   import ButtonComponent from './Button.vue';
-  import { useStore } from 'vuex';
 
   export default defineComponent({
     name: 'message',
@@ -50,7 +53,7 @@
     },
     props: {
       message: {
-        default:{id: '1', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
+        default: {id: '1', author: 'Anonimo', type: 'important', channel: '', date: '18-03-2024', text: 'Recado curto'},
         required: true,
         type: Object as PropType<MessageInterface>,
       }
@@ -81,14 +84,7 @@
       },
 
       tag():string{
-        switch(this?.message.type){
-          case 'urgent':
-            return 'Urgente'
-          case 'important':
-            return 'Importante'
-          default:
-            return 'Normal'
-        }
+        return translateType(this.message.type)
       },
 
       newMessage():boolean{
@@ -97,36 +93,27 @@
       }
     },
 
-    emits: ['handleGetMessagesByChannel', 'handleRefreshMessagesListOfChannel', 'buttonAction'],
+    emits: ['handleGetMessagesByChannel', 'handleRefreshMessagesListOfChannel'],
 
     methods:{
 
-      buttonAction(){
-        this.handleDeleteMessage(this.message._id)
+      handleGetType(){
+        return defineType(this.message.type);
       },
 
-      handleGetType(){
-        switch(this.message.type){
-          case 'not-important':
-            return 'secondary';
-          case 'urgent':
-            return 'danger';
-          default:
-            return 'primary';
-        }
-      },
       async handleDeleteMessage(id?: string){
         this.$store.dispatch('handleShowLoading', {showLoading: true});
-        try{
-          const response = await API.delete(`/messages/delete/${id}`);
-          this.$emit('handleRefreshMessagesListOfChannel');
-          this.$emit('handleGetMessagesByChannel', 'undefined');
-        }catch(e){
-          console.log(e);
-        }finally{
-          this.$store.dispatch('handleShowLoading', {showLoading: false});
-        }
-      }
+        deleteMessage(this.handleDelleteCallback, this.handleFinishinRequest, id)
+      },
+
+      handleDelleteCallback(){
+        this.$emit('handleRefreshMessagesListOfChannel');
+        this.$emit('handleGetMessagesByChannel', 'undefined');
+      },
+
+      handleFinishinRequest(){
+        this.$store.dispatch('handleShowLoading', {showLoading: false});
+      },
     }
   });
 </script>
