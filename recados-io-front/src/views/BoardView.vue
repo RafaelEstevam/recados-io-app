@@ -39,7 +39,7 @@
 
   import HeaderComponent from '@/components/Header.vue';
   import Message from '@/components/Message.vue';
-  import Modal from '@/components/Modal-v2.vue';
+  import Modal from '@/components/Modal.vue';
   import ButtonComponent from '@/components/Button.vue';
   import Filter from '@/components/Filter.vue';
 
