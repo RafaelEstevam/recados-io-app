@@ -140,6 +140,10 @@
     gap: $spacing-md;
     box-shadow: 0px 5px 0px #ccc;
 
+    @media(max-width: $screen-xs){
+      max-width: 100%;
+    }
+
     &.primary{
       background-color: $success-color-light;
       box-shadow: 0px 5px 0px $success-color;

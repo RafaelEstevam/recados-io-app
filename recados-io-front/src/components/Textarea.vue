@@ -1,17 +1,20 @@
 <template>
-  <div class="input">
-    <input
+  <div class="textarea">
+    <textarea
       :required="required"
+      :disabled="disabled"
       :name="inputName"
       :id="inputName"
       :placeholder="placeholder"
       :value="value"
       :type="type"
       @input="$emit('update:modelValue', $event.target.value)"
-      class="input__field"
+      class="textarea__field"
       :class="showValidation && 'error-input'"
-    />
-    <p class="input__validation" v-if="showValidation">{{ validationMessage }}</p>
+    >
+    </textarea>
+    <p>{{ value.length }}/{{ limit }}</p>
+    <p class="textarea__validation" v-if="showValidation">{{ validationMessage }}</p>
   </div>
 </template>
 
@@ -20,7 +23,7 @@
   import { computed, defineComponent } from 'vue';
 
   export default defineComponent({
-    name: 'inputComponent',
+    name: 'textareaComponent',
     props: {
       type: {
         type: String,
@@ -36,12 +39,19 @@
         type: Boolean,
         default: false
       },
+      disabled:{
+        type: Boolean,
+        default: false
+      },
       showValidation: {
         type: Boolean,
         default: false,
       },
       validationMessage: {
         type: String
+      },
+      limit:{
+        type: Number
       }
     },
     
@@ -57,7 +67,8 @@
       return {
         value
       };
-    }
+    },
+    
   })
 </script>
 
@@ -71,12 +82,13 @@
     width: 100%;
   }
 
-  .input__field{
+  .textarea__field{
     border: 0px;
     border-radius: $spacing-md;
     padding: $spacing-md;
     background-color: $light-color;
     width: 100%;
+    height: 100px;
 
     &.error-input{
       background-color: $danger-color-light;
@@ -85,7 +97,7 @@
     
   }
 
-  .input__validation{
+  .textarea__validation{
     font-size: $font-sm;
     color: $danger-color;
   }

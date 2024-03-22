@@ -1,17 +1,18 @@
 <template>
-  <div class="input">
-    <input
+  <div class="select">
+    <select
       :required="required"
       :name="inputName"
       :id="inputName"
-      :placeholder="placeholder"
       :value="value"
-      :type="type"
       @input="$emit('update:modelValue', $event.target.value)"
-      class="input__field"
-      :class="showValidation && 'error-input'"
-    />
-    <p class="input__validation" v-if="showValidation">{{ validationMessage }}</p>
+      class="select__field"
+    >
+      <option>Selecione uma prioridade</option>
+      <option value="not-important">Normal</option>
+      <option value="important">Importante</option>
+      <option value="urgent">Urgente</option>
+    </select>
   </div>
 </template>
 
@@ -22,31 +23,17 @@
   export default defineComponent({
     name: 'inputComponent',
     props: {
-      type: {
-        type: String,
-      },
       inputName: {
         type: String,
         required: true
-      },
-      placeholder:{
-        type: String
       },
       required:{
         type: Boolean,
         default: false
       },
-      showValidation: {
-        type: Boolean,
-        default: false,
-      },
-      validationMessage: {
-        type: String
-      }
     },
     
     setup(props, { emit }) {
-
       const value = computed({
         get: () => props.inputName,
         set: (newValue) => {
@@ -64,28 +51,28 @@
 <style lang="scss" scoped>
   @import '@/styles/tokens.scss';
 
-  .input{
+  .select{
     display: flex;
     flex-direction: column;
     gap: $spacing-sm;
     width: 100%;
   }
 
-  .input__field{
+  .select__field{
     border: 0px;
     border-radius: $spacing-md;
     padding: $spacing-md;
     background-color: $light-color;
     width: 100%;
 
-    &.error-input{
+    &.error-select{
       background-color: $danger-color-light;
       color: $danger-color;
     };
     
   }
 
-  .input__validation{
+  .select__validation{
     font-size: $font-sm;
     color: $danger-color;
   }

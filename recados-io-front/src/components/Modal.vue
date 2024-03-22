@@ -3,41 +3,111 @@
     <div class="modal__wrapper">
       <div class="modal__wrapper__header">
         <h2 class="modal__wrapper__header__title">Novo recado</h2>
-        <button @click="handleCloseModal">X</button>
+        <buttonComponent
+          :id="`close-modal`"
+          :label="'X'"
+          :color="'dark'"
+          :variant="'filled'"
+          :type="'submit'"
+          :size="'md'"
+          @buttonAction="handleCloseModal"
+        />
       </div>
       <div class="modal__wrapper__content">
-        <div>
-          <div>
+
+        <selectComponent
+          :inputName="messageType"
+          :requred="true"
+          v-model="messageType"
+        />
+
+        <textareaComponent
+          :inputName="message"
+          :limit="50"
+          :disabled="message.length == 50"
+          :placeholder="'Deixe seu recado'"
+          v-model="message"
+        />
+
+        <div v-if="user.isAnonymous" class="modal__checkbox__wrapper">
+          <p>Você entrou como um usuário anônimo.</p>
+          <checkboxComponent
+            :inputName="showUser"
+            :label="'Quer se identificar no recado?'"
+            v-model="showUser"
+            @updateCheckBox="updateCheckBox"
+          />
+        </div>
+
+        <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
+          <buttonComponent
+            :id="'button-modal'"
+            :label="`Salvar recado`"
+            :variant="'filled'"
+            :color="'primary'"
+            :fullwidth="true"
+            @button-action="handleSubmitToGPT"
+          />
+        </div>
+
+        <div v-if="acceptGptSuggestion" class="modal__wrapper__gpt__message">
+          <p><span>Corrigido com IA:</span> {{ gptMessage }}</p>
+          <buttonComponent
+            :id="'button-modal'"
+            :label="`Aceitar correção e salvar`"
+            :variant="'filled'"
+            :color="'secondary'"
+            :size="'sm'"
+            @button-action="handleAcceptGPTcorrection"
+          />
+        </div>
+
+        <div v-if="acceptGptSuggestion" class="modal__wrapper__footer__buttons">
+          <buttonComponent
+            :id="'button-modal'"
+            :label="`Salvar sem correção`"
+            :variant="'filled'"
+            :color="'primary'"
+            :fullwidth="true"
+            @button-action="handleSubmit"
+          />
+        </div>
+
+        <!-- <div> -->
+          <!-- <div>
             <select v-model="messageType">
               <option>Selecione uma prioridade</option>
               <option value="not-important">Normal</option>
               <option value="important">Importante</option>
               <option value="urgent">Urgente</option>
             </select>
-          </div>
-          <div>
+          </div> -->
+          
+
+          <!-- <div>
             <textarea @keydown="handleIsTyping" placeholder="Escreva seu recado" v-model="message" :disabled="message.length == 50"></textarea>
             <p>{{message.length}}/50</p>
-          </div>
+          </div> -->
+          
+          
+          
 
-          <div v-if="user.isAnonymous">
+          <!-- <div v-if="user.isAnonymous">
             <p>Você entrou como um usuário anônimo.</p>
             <p>Quer se identificar no recado? <input type="checkbox" v-model="showUser" /></p>
-          </div>
+          </div> -->
+
           
-        </div>
-        <div v-if="acceptGptSuggestion" class="modal__wrapper__gpt__message">
-          <p>Corrigido com IA: {{ gptMessage }}</p>
-        </div>
-      </div>
-      <div class="modal__wrapper__footer">
-        <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
-          <button @click="handleSubmitToGPT" :disabled="isLoading">Salvar recado</button>
-        </div>
-        <div v-else class="modal__wrapper__footer__buttons">
-          <button @click="handleAcceptGPTcorrection">Aceitar correção e salvar</button>
-          <button @click="handleSubmit">Salvar sem correção</button>
-        </div>
+
+          <!-- <div class="modal__wrapper__footer">
+            <div v-if="!acceptGptSuggestion" class="modal__wrapper__footer__buttons">
+              <button @click="handleSubmit" :disabled="isLoading">Salvar recado</button>
+            </div>
+            <div v-else class="modal__wrapper__footer__buttons">
+              <button @click="handleSubmit">Salvar sem correção</button>
+            </div>
+          </div> -->
+        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -56,8 +126,21 @@
 
   import debounce from '@/utils/debounce';
 
+  import ButtonComponent from '@/components/Button.vue';
+  import SelectComponent from '@/components/Select.vue';
+  import TextareaComponent from '@/components/Textarea.vue';
+  import CheckboxComponent from '@/components/Checkbox.vue';
+
+
   export default defineComponent({
     name: 'modal',
+
+    components: {
+      ButtonComponent,
+      SelectComponent,
+      TextareaComponent,
+      CheckboxComponent
+    },
 
     setup() {
 
@@ -115,8 +198,9 @@
           text: this.message,
           type: this.messageType
         };
+
         try{
-          const response = await API.post('/tickets/new', data);
+          const response = await API.post('/messages/new', data);
           const message:MessageInterface = response.data;
           this.$emit('handleClientActions', 'sendMessage', message);
         }catch(e){
@@ -148,6 +232,10 @@
         this.message = this.gptMessage;
         await this.handleSubmit();
       },
+
+      updateCheckBox(value:boolean){
+        this.showUser = value;
+      },
     }
   })
 </script>
@@ -166,18 +254,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: $spacing-md;
   }
 
   .modal__wrapper{
-    width: $screen-xs;
-    min-height: $screen-xs;
+    width: 100%;
+    max-width: $screen-xs;
     background-color: $white-color;
     border-radius: $spacing-md;
-    padding:$spacing-md;
+    padding:$spacing-lg;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: $spacing-md;
+    gap: $spacing-lg;
   }
 
   .modal__wrapper__header{
@@ -186,13 +274,30 @@
     align-items: center;
   }
 
+  .modal__wrapper__content{
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
   .modal__wrapper__gpt__message{
-    background-color: $primary-color;
-    color: $dark-color;
+    background-color: $secondary-color-light;
+    color: $secondary-color;
     padding: $spacing-md;
+    border-radius: $spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
   }
 
   .modal__wrapper__header__title{
     font-size: $font-xl;
+  }
+
+  .modal__checkbox__wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
   }
 </style>

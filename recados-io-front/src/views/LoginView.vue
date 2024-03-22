@@ -121,7 +121,6 @@
         this.isAnonymous = value;
       },
 
-
     }
   });
 </script>

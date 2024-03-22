@@ -17,7 +17,6 @@
         />
       </div>
       
-      
       <div class="header__wrapper__logout">
         <p class="header__wrapper__username">{{ userInfo }}</p>
         <buttonComponent
@@ -75,6 +74,7 @@
 </script>
 
 <style lang="scss">
+
   @import '@/styles/tokens.scss';
 
   .header{
@@ -88,6 +88,9 @@
     align-items: center;
     background-color: $dark-color;
     padding: $spacing-md $spacing-xxl;
+    @media(max-width: $screen-sm){
+      padding: $spacing-md;
+    }
   }
 
   .header__title{
@@ -121,13 +124,21 @@
 
   .header__wrapper__logout{
     display: flex;
-    gap: $spacing-md;
     align-items: center;
+    gap: $spacing-md;
+    
+    @media(max-width: $screen-xs){
+      flex-direction: column;
+    }
   }
 
   .header__wrapper__username{
     color: $white-color;
     font-weight: bold;
+
+    @media(max-width: $screen-xs){
+      display: none;
+    }
   }
 
 </style>

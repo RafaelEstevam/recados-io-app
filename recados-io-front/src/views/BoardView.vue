@@ -7,18 +7,19 @@
       @filterAction="handleFilter"
     />
     
-    <div class="board__messages">
-      <div v-if="messages.length > 0" v-for="message in messages" :key="message._id">
-        <message
-          :message="message"
-          @handleGetMessagesByChannel="handleGetMessagesByChannel"
-        />
-      </div>
-      <h2 v-else class="board__title">Sem recados neste mural.</h2>
-      <modal
-        @handleClientActions="handleClientActions"
+    <div class="board__messages" >
+      <message
+        :message="message"
+        :key="message._id"
+        v-if="messages.length > 0"
+        v-for="message in messages"
+        @handleGetMessagesByChannel="handleGetMessagesByChannel"
       />
+      <h2 v-else class="board__title">Sem recados neste mural.</h2>
     </div>
+    <modal
+      @handleClientActions="handleClientActions"
+    />
 
   </div>
 </template>
@@ -205,6 +206,10 @@
 
     @media(max-width: $screen-sm){
       padding-bottom: $spacing-xxl * 3;
+    }
+
+    @media(max-width: $screen-xs){
+      flex-direction: column;
     }
 
     .board__title{
