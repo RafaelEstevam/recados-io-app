@@ -41,7 +41,6 @@
   import { useRoute } from 'vue-router';
   import { useStore } from 'vuex';
 
-  // import API from '@/config/api';
   import pusher from '@/config/pusher';
   import scrollDown from '@/utils/scrollDown';
 
@@ -55,23 +54,22 @@
 
   export default defineComponent({
     name: 'board',
+    
     components: {
-    HeaderComponent,
-    ButtonComponent,
-    Filter,
-    Message,
-    Modal,
-    AddMessage
-  },
+      HeaderComponent,
+      ButtonComponent,
+      Filter,
+      Message,
+      Modal,
+      AddMessage
+    },
     
     setup() {
       const store = useStore();
       const route = useRoute();
-
       const channelName = `private-${route.params.channel}`;
       const channel = pusher.subscribe(channelName);
       const channelEvent = 'client-my-event';
-      
       const showModal = computed(() => store.state.showModal)
 
       return {
