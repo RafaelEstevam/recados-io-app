@@ -46,7 +46,7 @@
             :variant="'filled'"
             :color="'primary'"
             :fullwidth="true"
-            :disabled="message.length <= 3"
+            :disabled="message.length <= 3 || messageType === ''"
             @button-action="handleSubmitToGPT"
           />
         </div>
