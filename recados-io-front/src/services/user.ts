@@ -1,3 +1,4 @@
+import { UserInterface } from "@/interfaces/user.interface";
 
 const getUserData = () => {
   if(sessionStorage.getItem('user')){
@@ -6,6 +7,16 @@ const getUserData = () => {
   return false;
 };
 
+const setUserData = (user: UserInterface) => {
+  sessionStorage.setItem('user', JSON.stringify(user));
+};
+
+const removeUserData = () => {
+  sessionStorage.removeItem('user');
+};
+
 export {
   getUserData,
+  setUserData,
+  removeUserData
 }

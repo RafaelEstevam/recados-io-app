@@ -1,4 +1,5 @@
 import { UserInterface } from '@/interfaces/user.interface';
+import { removeUserData, setUserData } from '@/services/user';
 import { createStore } from 'vuex';
 
 interface RootState {
@@ -45,12 +46,12 @@ export default createStore<RootState>({
       commit('setShowLoading', payload.showLoading);
     },
     handleLogin({commit}, user: UserInterface){
-      sessionStorage.setItem('user', JSON.stringify(user));
+      setUserData(user);
       commit('setUser', user);
     },
     
     handleLogout(){
-      sessionStorage.removeItem('user');
+      removeUserData();
     }
   },
   modules: {
