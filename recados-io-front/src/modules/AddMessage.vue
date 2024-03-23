@@ -71,7 +71,7 @@
   import { useRoute } from 'vue-router';
   import { useStore } from "vuex";
 
-  import debounce from '@/utils/debounce';
+  // import debounce from '@/utils/debounce';
 
   import ButtonComponent from '@/components/Button.vue';
   import SelectComponent from '@/components/Select.vue';
@@ -119,13 +119,13 @@
       }
     },
 
-    emits: ['setShow', 'handleClientActions', 'sendComponent'],
+    emits: ['setShow', 'sendComponent', 'handleClientSendMessage'],
 
-    watch: {
-      message(){
-        this.handleIsTyping();
-      },
-    },
+    // watch: {
+    //   message(){
+    //     this.handleIsTyping();
+    //   },
+    // },
 
     methods: {
 
@@ -138,13 +138,13 @@
         this.userIsTyping = false;
       },
 
-      handleIsTyping(){
-        if(!this.userIsTyping){
-          this.$emit('handleClientActions', 'typing', this.user)
-          this.userIsTyping = true;
-          debounce(this.notificationTime, this.handleAllowNotification)();
-        }
-      },
+      // handleIsTyping(){
+      //   if(!this.userIsTyping){
+      //     this.$emit('handleClientActions', 'typing', this.user)
+      //     this.userIsTyping = true;
+      //     debounce(this.notificationTime, this.handleAllowNotification)();
+      //   }
+      // },
 
       handleResetForm(){
         this.message = '',
@@ -157,7 +157,7 @@
       },
 
       handleSubmitCallback(message: MessageInterface){
-        this.$emit('handleClientActions', 'sendMessage', message);
+        this.$emit('handleClientSendMessage', message);
         this.handleCloseModal();
       },
 

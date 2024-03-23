@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import BoardView from '../views/BoardView.vue';
+import BoardViewV2 from '../views/BoardView-v2.vue';
 import LoginView from '../views/LoginView.vue';
 import Page404View from '../views/404View.vue';
 import { getUserData } from '@/services/user';
@@ -11,9 +12,17 @@ const routes: Array<RouteRecordRaw> = [
     component: LoginView
   },
   {
+    path: '/board-v1/:channel',
+    name: 'boardV1',
+    component: BoardView,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/board/:channel',
     name: 'board',
-    component: BoardView,
+    component: BoardViewV2,
     meta: {
       requiresAuth: true
     }

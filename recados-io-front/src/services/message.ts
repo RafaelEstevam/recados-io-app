@@ -23,7 +23,7 @@ const postMessage = async (showUser: boolean, user: UserInterface, channel: stri
 
 const getMessages = async (channelName: string, filter: string, finishCallback: Function) => {
   const data = {
-    channel: channelName,
+    channel: `private-${channelName}`,
     type: filter
   };
 
@@ -41,13 +41,10 @@ const deleteMessage = async (callback: Function, finishCallback: Function, id?: 
   try{
     const response = await API.delete(`/messages/delete/${id}`);
     callback()
-    // this.$emit('handleRefreshMessagesListOfChannel');
-    // this.$emit('handleGetMessagesByChannel', 'undefined');
   }catch(e){
     console.log(e);
   }finally{
     finishCallback()
-    // this.$store.dispatch('handleShowLoading', {showLoading: false});
   }
 }
 
