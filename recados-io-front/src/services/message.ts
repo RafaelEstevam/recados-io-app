@@ -26,12 +26,12 @@ const getMessages = async (channelName: string, filter: string, finishCallback: 
     channel: `private-${channelName}`,
     type: filter
   };
-
   try{
     const response = await API.post(`/messages/all`, data);
     return response.data;
   }catch(e){
     console.log(e)
+    return [];
   }finally{
     finishCallback()
   }

@@ -4,6 +4,7 @@ import BoardViewV2 from '../views/BoardView-v2.vue';
 import LoginView from '../views/LoginView.vue';
 import Page404View from '../views/404View.vue';
 import { getUserData } from '@/services/user';
+import inputValidation from '@/utils/inputValidation';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,7 +42,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = getUserData();
-  if(to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated){
+
+  const channelName = `${to.params.channel}`;
+  const isValidChannel = inputValidation.hasSpaces(channelName);
+
+  if((to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) || isValidChannel){
     next('/')
   }else{
     next();
