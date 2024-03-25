@@ -46,7 +46,7 @@
     <div v-if="acceptGptSuggestion" class="addMessage__wrapper__gpt__message">
       <p class="addMessage__wrapper__gpt__message__text"><span>Corrigido com IA:</span> {{ gptMessage }}</p>
       <buttonComponent
-        :id="'button-modal'"
+        :id="'acceptGPTbutton'"
         :label="`Aceitar correção e salvar`"
         :variant="'filled'"
         :color="'secondary'"
@@ -57,7 +57,7 @@
 
     <div v-if="acceptGptSuggestion" class="addMessage__wrapper__footer__buttons">
       <buttonComponent
-        :id="'button-modal'"
+        :id="'acceptDefaultbutton'"
         :label="`Salvar sem correção`"
         :variant="'filled'"
         :color="'primary'"
