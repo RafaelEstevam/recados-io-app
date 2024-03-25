@@ -4,13 +4,15 @@
     <p>Selecione uma prioridade e deixe o seu recado.</p>
 
     <selectComponent
-      :inputName="messageType"
+      :inputName="'messageType'"
+      :inputValue="messageType"
       :requred="true"
       v-model="messageType"
     />
 
     <textareaComponent
-      :inputName="message"
+      :inputName="'message'"
+      :inputValue="message"
       :limit="50"
       :disabled="disableByGPTRequest"
       :placeholder="'Deixe seu recado'"
@@ -31,7 +33,7 @@
 
     <div v-if="!acceptGptSuggestion" class="addMessage__wrapper__footer__buttons">
       <buttonComponent
-        :id="'button-modal'"
+        :id="'sendGPTbutton'"
         :label="`Salvar recado`"
         :variant="'filled'"
         :color="'primary'"

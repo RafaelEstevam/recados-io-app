@@ -33,6 +33,10 @@
         type: String,
         required: true
       },
+      inputValue: {
+        type: String,
+        required: true
+      },
       placeholder:{
         type: String
       },
@@ -59,9 +63,9 @@
     setup(props, { emit }) {
 
       const value = computed({
-        get: () => props.inputName,
+        get: () => props.inputValue,
         set: (newValue) => {
-          emit('update:inputName', newValue);
+          emit('update:inputValue', newValue);
         },
       });
 

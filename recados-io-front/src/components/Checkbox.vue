@@ -25,6 +25,10 @@
         type: String,
         required: true
       },
+      inputValue: {
+        type: String,
+        required: true
+      },
       required:{
         type: Boolean,
         default: false

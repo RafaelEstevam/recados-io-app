@@ -9,14 +9,16 @@
         <form @submit.prevent="handleSubmit" class="login__wrapper__content__form">
           <p>Informe seu usuário e o nome do seu mural de recados.</p>
           <inputComponent
-            :inputName="userName"
+            :inputName="'userName'"
+            :inputValue="userName"
             :placeholder="'Nome de usuário'"
             :required="true"
             v-model="userName"
           />
 
           <inputComponent
-            :inputName="channelName"
+            :inputName="'channelName'"
+            :inputValue="channelName"
             :placeholder="'Nome do mural de recados'"
             :required="true"
             :showValidation="channelNameValidation"
@@ -25,7 +27,8 @@
           />
 
           <checkboxComponent
-            :inputName="isAnonymous"
+            :inputValue="isAnonymous"
+            :inputName="'isAnonymous'"
             :label="'Entrar como Anônimo'"
             v-model="isAnonymous"
             @updateCheckBox="updateCheckBox"
