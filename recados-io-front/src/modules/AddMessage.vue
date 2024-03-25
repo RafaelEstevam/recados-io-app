@@ -1,5 +1,8 @@
 <template>
   <div class="addMessage">
+
+    <p>Selecione uma prioridade e deixe o seu recado.</p>
+
     <selectComponent
       :inputName="messageType"
       :requred="true"
@@ -9,8 +12,10 @@
     <textareaComponent
       :inputName="message"
       :limit="50"
-      :disabled="message.length == 50"
+      :disabled="disableByGPTRequest"
       :placeholder="'Deixe seu recado'"
+      :showValidation="messageValidation"
+      :validationMessage="messageValidationMessage"
       v-model="message"
     />
 
@@ -31,7 +36,7 @@
         :variant="'filled'"
         :color="'primary'"
         :fullwidth="true"
-        :disabled="message.length <= 3 || messageType === ''"
+        :disabled="messageType === ''"
         @button-action="handleSubmitToGPT"
       />
     </div>
@@ -71,6 +76,8 @@
   import { useRoute } from 'vue-router';
   import { useStore } from "vuex";
 
+  import inputValidation from '@/utils/inputValidation';
+
   import ButtonComponent from '@/components/Button.vue';
   import SelectComponent from '@/components/Select.vue';
   import TextareaComponent from '@/components/Textarea.vue';
@@ -89,6 +96,7 @@
     setup() {
 
       const notificationTime = 5000;
+      const minMessageLength = 3;
       const route = useRoute();
       const store = useStore();
       const showModal = computed(() => store.state.showModal);
@@ -101,7 +109,8 @@
         showModal,
         user,
         anonyousUser,
-        notificationTime
+        notificationTime,
+        minMessageLength
       };
     },
 
@@ -113,7 +122,10 @@
         acceptGptSuggestion: false,
         isLoading: false,
         showUser: !this.anonyousUser,
-        userIsTyping: false
+        userIsTyping: false,
+        messageValidation: false,
+        disableByGPTRequest: false,
+        messageValidationMessage: '',
       }
     },
 
@@ -170,13 +182,27 @@
       },
 
       async handleSubmitToGPT(){
-        this.$store.dispatch('handleShowLoading', {showLoading: true});
-        postToGPT(this.message, this.handleShowGptSuggestion, this.handleFinishinRequest);
+        if(this.handleValidation()){
+          this.$store.dispatch('handleShowLoading', {showLoading: true});
+          this.disableByGPTRequest = true;
+          postToGPT(this.message, this.handleShowGptSuggestion, this.handleFinishinRequest);
+        }
       },
 
       async handleAcceptGPTcorrection(){
         this.message = this.gptMessage;
         await this.handleSubmit();
+      },
+
+      handleValidation(){
+        if(inputValidation.minLenght(this.message, this.minMessageLength)){
+          this.messageValidation = true;
+          this.messageValidationMessage = 'Essa mensagem deve conter, no mínimo, 3 letras.'
+          return false;
+        }else{
+          this.messageValidation = false;
+        }
+        return true;
       },
 
       updateCheckBox(value:boolean){

@@ -8,6 +8,7 @@
       :placeholder="placeholder"
       :value="value"
       :type="type"
+      :maxlength="limit"
       @input="$emit('update:modelValue', $event.target.value)"
       class="textarea__field"
       :class="showValidation && 'error-input'"

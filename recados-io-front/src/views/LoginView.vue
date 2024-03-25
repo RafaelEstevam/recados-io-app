@@ -7,6 +7,7 @@
       </div>
       <div class="login__wrapper__content">
         <form @submit.prevent="handleSubmit" class="login__wrapper__content__form">
+          <p>Informe seu usuário e o nome do seu mural de recados.</p>
           <inputComponent
             :inputName="userName"
             :placeholder="'Nome de usuário'"
