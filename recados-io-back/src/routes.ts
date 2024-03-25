@@ -1,5 +1,7 @@
 import {Router, Request, Response} from 'express';
 import MessageController from './controller/message.controller';
+import GPTController from './controller/gpt.controller';
+
 import { pusher } from './pusher';
 
 const routes = Router();
@@ -19,5 +21,7 @@ routes.get('/messages/all', MessageController.getAll);
 routes.post('/messages/all', MessageController.getAllByChannelId);
 routes.post('/messages/new', MessageController.post);
 routes.delete('/messages/delete/:id', MessageController.delete);
+
+routes.post('/gpt', GPTController.post);
 
 export {routes};

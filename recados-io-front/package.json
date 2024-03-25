@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e"
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:cypress": "cross-env $(cat .env | xargs) npx cypress open"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
@@ -31,6 +32,7 @@
     "@vue/test-utils": "^2.0.0-0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
     "babel-jest": "^27.0.6",
+    "cross-env": "^7.0.3",
     "cypress": "^9.7.0",
     "cypress-dotenv": "^2.0.0",
     "dotenv": "^16.4.5",

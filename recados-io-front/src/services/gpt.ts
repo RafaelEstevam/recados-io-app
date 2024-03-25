@@ -1,4 +1,5 @@
 import GPT from "@/config/gpt";
+import API from "@/config/api";
 
 interface GptMessage {
   role: string,
@@ -33,6 +34,22 @@ const postToGPT = async (message:string, callback: Function, finishCallback: Fun
   }
 }
 
+const postToGPTV2 = async (message:string, callback: Function, finishCallback: Function) => {
+  const data = {
+    message
+  }
+
+  try{
+    const gptResponse = await API.post('/gpt', data);
+    callback(gptResponse);
+  }catch(e){
+    console.log(e);
+  }finally{
+    finishCallback();
+  }
+}
+
 export {
-  postToGPT
+  postToGPT,
+  postToGPTV2
 }
