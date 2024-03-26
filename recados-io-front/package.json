@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:cypress": "cross-env $(cat .env | xargs) npx cypress open"
+    "test:cypress": "cross-env $(cat .env.development | xargs) npx cypress open",
+    "test:cypress-windows": "FOR /F \"usebackq tokens=*\" %i IN (`type .env.development`) DO set %i && npx cypress open"
   },
   "dependencies": {
     "@types/axios": "^0.14.0",

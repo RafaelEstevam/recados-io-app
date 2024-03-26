@@ -1,46 +1,24 @@
-GET http://localhost:8888/messages
+GET http://localhost:8888/messages/all
 content-type: application/json
 
 ###
 
-GET http://localhost:8888/messages/all/private-my-channel
-content-type: application/json
-
-###
-
-GET http://localhost:8888/messages/message/123
-content-type: application/json
-
-###
-
-POST http://localhost:8888/messages/new HTTP/1.1
+POST http://localhost:8888/messages/all
 content-type: application/json
 
 {
-  "author": "Rafael",
-  "text": "Recado salvo no banco",
-  "type": "not-important",
-  "channel": "private-my-channel"
+  "channel": "private-my-channel",
+  "type": "not-important"
 }
 
 ###
 
-DELETE http://localhost:8888/messages/delete/65f85998ec674aa1c903db7b
+DELETE http://localhost:8888/messages/delete/6603102c815eab3d4695c546
 content-type: application/json
 
 ###
 
-POST http://localhost:8888/pusher/auth HTTP/1.1
-content-type: application/json
-
-{
-  "socket_id": "Rafael",
-  "channel_name": "private-my-channel"
-}
-
-###
-
-POST http://localhost:8888/new-message HTTP/1.1
+POST http://localhost:8888/messages/new
 content-type: application/json
 
 {
@@ -52,6 +30,3 @@ content-type: application/json
 }
 
 ###
-
-GET http://localhost:8888/messages/all?channel=private-meu-mural&type=not-important
-content-type: application/json
