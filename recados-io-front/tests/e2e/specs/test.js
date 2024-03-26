@@ -1,11 +1,10 @@
-// https://docs.cypress.io/api/table-of-contents
-
-const boardName = 'meu-mural';
-const url = 'http://localhost:8080';
+const userName = 'cypress';
+const boardName = new Date().getTime();
+const url = 'https://recados-io.netlify.app';
 
 function Login(){
   cy.visit(url);
-  cy.get('input[name="userName"]').type('rafael');
+  cy.get('input[name="userName"]').type(userName);
   cy.get('input[name="channelName"]').type(boardName);
   cy.get('input[name="isAnonymous"]').check();
   cy.get('button[type="submit"]').click();
@@ -38,12 +37,33 @@ describe('Main flow of application', () => {
     cy.wait(3000);
   });
 
+  it('Adding a message on Board with name', () => {
+    Login();
+
+    cy.get('#button-modal').click();
+    cy.get('select[name="messageType"]').select('not-important');
+    cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
+
+    cy.get('input[type="checkbox"]').click();
+    cy.get('#sendGPTbutton').click();
+    cy.get('#acceptDefaultbutton').click();
+
+    cy.wait(3000);
+
+    const lastMessage = cy.get('.message').last().then((element) => {
+      cy.wrap(element).find('.message__info').then((info) => {
+        cy.wrap(info).contains('cypress')
+      })
+    });
+
+  });
+
   it('Wating for GPT response and Add IA response', () => {
     Login();
 
     cy.get('#button-modal').click();
     cy.get('select[name="messageType"]').select('not-important');
-    cy.get('textarea[name="message"]').type('Ess e um mensage test escrita por Cipress');
+    cy.get('textarea[name="message"]').type('Ess e um mensage test escrita por Cypress');
     cy.get('#sendGPTbutton').click();
     cy.wait(5000);
 
