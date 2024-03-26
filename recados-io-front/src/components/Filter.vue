@@ -7,7 +7,7 @@
       <p>Filtrar por: </p>
 
       <buttonComponent
-        :id="'button-modal'"
+        :id="'button-important'"
         :label="`Importante`"
         :variant="'outlined'"
         :color="'primary'"
@@ -15,7 +15,7 @@
       />
 
       <buttonComponent
-        :id="'button-modal'"
+        :id="'button-not-important'"
         :label="`Normal`"
         :variant="'outlined'"
         :color="'secondary'"
@@ -23,7 +23,7 @@
       />
 
       <buttonComponent
-        :id="'button-modal'"
+        :id="'button-urgent'"
         :label="`Urgente`"
         :variant="'outlined'"
         :color="'danger'"
@@ -31,7 +31,7 @@
       />
 
       <buttonComponent
-        :id="'button-modal'"
+        :id="'button-undefined'"
         :label="`Todos`"
         :variant="'outlined'"
         :color="'dark'"

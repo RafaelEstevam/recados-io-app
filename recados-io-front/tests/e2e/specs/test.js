@@ -64,5 +64,6 @@ describe('Main flow of application', () => {
         })
       })
     });
+
   });
 });

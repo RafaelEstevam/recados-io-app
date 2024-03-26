@@ -14,6 +14,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+  interface ButtonProps {
+    type: 'button' | 'submit' | 'reset' | undefined;
+  }
+
   export default defineComponent({
     name: 'buttonComponent',
     props: {
@@ -42,10 +46,11 @@ import { defineComponent } from 'vue';
         default: false,
       },
       type: {
-        type: String,
-        required: true,
-        default: 'button',
-        validator: (value: string) => ['button', 'submit', 'reset'].includes(value),
+        type: String as () => ButtonProps['type'], // Enforce type check
+        default: 'default' as ButtonProps['type'], // Default to 'default' type
+        validator: (value: string) => {
+          return ['button', 'submit', 'reset'].includes(value);
+        }
       },
     },
     computed:{

@@ -37,6 +37,7 @@
 
   import ButtonComponent from './Button.vue';
   import Logo from './Logo.vue';
+import { removeUserData } from '@/services/user';
 
   export default defineComponent({
     name: 'headerComponent',
@@ -65,7 +66,7 @@
         this.$store.dispatch('handleShowModal', {showModal: true})
       },
       handleLogout(){
-        this.$store.dispatch('handleLogout');
+        removeUserData();
         this.$router.push(`/`);
       }
     }
