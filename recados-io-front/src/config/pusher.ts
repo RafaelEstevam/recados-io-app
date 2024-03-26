@@ -1,7 +1,7 @@
 import Pusher from 'pusher-js';
 
 const pusher = new Pusher(
-  '1c458ef2083750c2ffa9',
+  process.env.VUE_APP_PUSHER_CONNECTION_KEY,
   {
     cluster: 'us2',
     authEndpoint: `${process.env.VUE_APP_API}/pusher/auth`

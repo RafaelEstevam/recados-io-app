@@ -1,5 +1,5 @@
 const userName = 'cypress';
-const boardName = new Date().getTime();
+const boardName = 'meu-mural';
 const url = 'http://localhost:8080';
 
 function Login(){

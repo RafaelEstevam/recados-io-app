@@ -20,6 +20,8 @@ Crie um arquivo chamado .env.development com base no arquivo .env.example e conf
 
 - BASE_URL: Endereço da aplicação. Por padrão, configure como http://localhost:8080. O frontend da aplicação será disponível neste endereço por padrão.
 
+- VUE_APP_PUSHER_CONNECTION_KEY (add_id): ID da conta dentro do Pusher.
+
 ## Rodando o projeto
 
 Depois das configurações execute o seguinte comando:
