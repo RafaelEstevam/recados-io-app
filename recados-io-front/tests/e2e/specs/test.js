@@ -11,6 +11,33 @@ function Login(){
   cy.wait(3000);
 }
 
+function AddingMessage(type){
+  cy.get('#button-modal').click();
+  cy.get('select[name="messageType"]').select(type);
+  cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
+  cy.get('#sendGPTbutton').click();
+  cy.get('#acceptDefaultbutton').click();
+}
+
+function RemovingLast(){
+  const lastMessage = cy.get('.message').last().then((element) => {
+    cy.wrap(element).find('.button').then((button) => {
+      cy.wrap(button).invoke('attr', 'id').then((id) => {
+        button.click();
+      })
+    })
+  });
+}
+
+function Filtering(buttonId, length){
+  cy.get(buttonId).click();
+  cy.wait(3000);
+
+  cy.get('.message').then(elements => {
+    expect(elements).to.have.length(length);
+  });
+}
+
 describe('Main flow of application', () => {
   it('Visits the app root url', () => {
     cy.visit(url);
@@ -26,11 +53,12 @@ describe('Main flow of application', () => {
   it('Adding message on Board', () => {
     Login();
 
-    cy.get('#button-modal').click();
-    cy.get('select[name="messageType"]').select('not-important');
-    cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
-    cy.get('#sendGPTbutton').click();
-    cy.get('#acceptDefaultbutton').click();
+    AddingMessage('not-important');
+    // cy.get('#button-modal').click();
+    // cy.get('select[name="messageType"]').select('not-important');
+    // cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
+    // cy.get('#sendGPTbutton').click();
+    // cy.get('#acceptDefaultbutton').click();
     
     cy.contains('Essa é uma mensagem teste escrita por Cypress').should('exist');
 
@@ -42,7 +70,7 @@ describe('Main flow of application', () => {
 
     cy.get('#button-modal').click();
     cy.get('select[name="messageType"]').select('not-important');
-    cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
+    cy.get('textarea[name="message"]').type('Essa é uma mensagem identificada Cypress');
 
     cy.get('input[type="checkbox"]').click();
     cy.get('#sendGPTbutton').click();
@@ -75,15 +103,28 @@ describe('Main flow of application', () => {
   
   it('Select the last message and removing it', () => {
     Login();
-
-    const lastMessage = cy.get('.message').last().then((element) => {
-      cy.wrap(element).find('.button').then((button) => {
-        cy.wrap(button).invoke('attr', 'id').then((id) => {
-          button.click();
-          cy.get(`#${id}`).should('not.exist');
-        })
-      })
-    });
-
+    RemovingLast();
+    cy.wait(3000);
   });
+
+  it('Doing filter by button', () => {
+    Login();
+
+    AddingMessage('urgent');
+    AddingMessage('important');
+
+    cy.wait(1000);
+    Filtering('#button-important', 1);
+
+    cy.wait(1000);
+    Filtering('#button-urgent', 1);
+
+    cy.wait(1000);
+    Filtering('#button-not-important', 2);
+
+    cy.wait(3000);
+    Filtering('#button-undefined', 4);
+
+    cy.wait(3000);
+  })
 });
