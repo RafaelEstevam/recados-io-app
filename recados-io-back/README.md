@@ -14,9 +14,11 @@ Crie um arquivo chamado .env.development com base no arquivo .env.example e conf
 
 - MONGO_DB_URL: Conexão com o Mongo DB Atlas, para armazenamento das mensagens salvas no mural. Para gerar essa conexão, visite https://www.mongodb.com/basics/mongodb-connection-string#:~:text=How%20to%20get%20your%20MongoDB,connection%20string%20for%20your%20cluster.
 
-- PUSHER_CONNECTION_KEY: Conexão com o serviço Pusher, para comunicação em tempo real entre os usuários. Para gerar a chave(key) de acesso, visite a página https://pusher.com/docs/channels/getting_started/javascript-realtime-chart/?ref=use-case-quick-starts para ver como criar as chaves de acesso para o Pusher.
+- PUSHER_CONNECTION_KEY (key): Conexão com o serviço Pusher, para comunicação em tempo real entre os usuários. Para gerar a chave(key) de acesso, visite a página https://pusher.com/docs/channels/getting_started/javascript-realtime-chart/?ref=use-case-quick-starts para ver como criar as chaves de acesso para o Pusher.
 
-- PUSHER_CONNECTION_SECRET: Gerado em conjunto com a chave(key).
+- PUSHER_CONNECTION_KEY (add_id): ID da conta dentro do Pusher.
+
+- PUSHER_CONNECTION_SECRET (secret): Gerado em conjunto com a chave(key).
 
 ![Tela do Pusher com a chaves de conexão](./pusher-key.png)
 

@@ -1,7 +1,7 @@
 import Pusher from 'pusher';
 
 const pusher = new Pusher({
-    appId:'1769831',
+    appId: process.env.PUSHER_CONNECTION_ID || '',
     key: process.env.PUSHER_CONNECTION_KEY || '',
     secret: process.env.PUSHER_CONNECTION_SECRET || '',
     cluster: 'us2',

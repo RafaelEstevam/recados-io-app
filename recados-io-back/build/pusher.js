@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.pusher = void 0;
 const pusher_1 = __importDefault(require("pusher"));
 const pusher = new pusher_1.default({
-    appId: '1769831',
+    appId: process.env.PUSHER_CONNECTION_ID || '',
     key: process.env.PUSHER_CONNECTION_KEY || '',
     secret: process.env.PUSHER_CONNECTION_SECRET || '',
     cluster: 'us2',
