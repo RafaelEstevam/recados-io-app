@@ -34,7 +34,7 @@ Depois das configurações execute o seguinte comando:
 npm run dev
 ```
 
-Esse comando irá iniciar o frontend da aplicação no endereço http://localhost:8888
+Esse comando irá iniciar o backend da aplicação no endereço http://localhost:8888
 
 ## Rotas disponíveis no backend
 
