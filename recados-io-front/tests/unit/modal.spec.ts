@@ -3,7 +3,7 @@ import Select from '@/components/Select.vue';
 
 describe('Select.vue', () => {
 
-  const inputName = 'select';
+  const inputName = 'textarea';
   const inputValue = '';
 
   it('render Select with props', () => {
@@ -22,6 +22,9 @@ describe('Select.vue', () => {
   });
 
   it('Select show options to select message type', () => {
+    const inputName = 'select';
+    const inputValue = '';
+
     const wrapper = mount(Select, {
       props: {
         inputName,

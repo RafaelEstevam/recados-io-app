@@ -28,8 +28,6 @@ describe('Textarea.vue', () => {
   it('Textarea show error when validated', () => {
     
     const inputValue = 'Ab'
-    const inputName = 'textarea'
-    const limit = 50;
     const showValidation = inputValue.length < 3
     const validationMessage = 'O texto é muito curto.'
 

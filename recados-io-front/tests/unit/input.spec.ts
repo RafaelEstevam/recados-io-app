@@ -23,7 +23,6 @@ describe('Input.vue', () => {
   it('Input show error when validated', () => {
     
     const inputValue = 'mostrando validação'
-    const inputName = 'input'
     const showValidation = inputValue.length > 10
     const validationMessage = 'O texto é muito grande'
 
