@@ -1,6 +1,6 @@
 const userName = 'cypress';
 const boardName = new Date().getTime();
-const url = 'https://recados-io.netlify.app';
+const url = 'http://localhost:8080';
 
 function Login(){
   cy.visit(url);

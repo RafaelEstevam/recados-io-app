@@ -71,7 +71,7 @@
 <script lang="ts">
   import { defineComponent, computed, defineAsyncComponent } from "vue";
 
-  import { postToGPTV2 } from '@/services/gpt';
+  import { postToGPT } from '@/services/gpt';
   import { postMessage } from '@/services/message';
 
   import { MessageInterface } from '@/interfaces/message.interface';
@@ -187,7 +187,7 @@
         if(this.handleValidation()){
           this.$store.dispatch('handleShowLoading', {showLoading: true});
           this.disableByGPTRequest = true;
-          postToGPTV2(this.message, this.handleShowGptSuggestion, this.handleFinishinRequest);
+          postToGPT(this.message, this.handleShowGptSuggestion, this.handleFinishinRequest);
         }
       },
 

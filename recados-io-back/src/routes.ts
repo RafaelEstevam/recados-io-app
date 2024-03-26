@@ -1,6 +1,6 @@
 import {Router, Request, Response} from 'express';
 import MessageController from './controller/message.controller';
-import GPTController from './controller/gpt.controller';
+// import GPTController from './controller/gpt.controller';
 
 import { pusher } from './pusher';
 
@@ -22,6 +22,6 @@ routes.post('/messages/all', MessageController.getAllByChannelId);
 routes.post('/messages/new', MessageController.post);
 routes.delete('/messages/delete/:id', MessageController.delete);
 
-routes.post('/gpt', GPTController.post);
+// routes.post('/gpt', GPTController.post);
 
 export {routes};
