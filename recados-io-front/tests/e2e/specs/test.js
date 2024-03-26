@@ -1,6 +1,6 @@
 const userName = 'cypress';
-const boardName = 'meu-mural';
-const url = 'http://localhost:8080';
+const boardName = new Date().getTime();
+const url = 'https://recados-io.netlify.app';
 
 function Login(){
   cy.visit(url);
@@ -54,11 +54,6 @@ describe('Main flow of application', () => {
     Login();
 
     AddingMessage('not-important');
-    // cy.get('#button-modal').click();
-    // cy.get('select[name="messageType"]').select('not-important');
-    // cy.get('textarea[name="message"]').type('Essa é uma mensagem teste escrita por Cypress');
-    // cy.get('#sendGPTbutton').click();
-    // cy.get('#acceptDefaultbutton').click();
     
     cy.contains('Essa é uma mensagem teste escrita por Cypress').should('exist');
 
