@@ -48,12 +48,16 @@ A lista de tecnologias utilizadas na aplicação consiste em:
 - Jest: Testes unitários.
 - Moment: Conversor de datas;
 
+O frontend está hospedado dentro da Netlify.
+
 ### Backend
 
 - Node.JS: Javascript para rodar em servidor;
 - Express: Framework para desenvolvimento de aplicações REST API no Node.JS;
 - Axios: Ferramenta para integração e execução de requisições no frontend;
 - MongoDB: Banco de dados não relacional para salvamento das mensagens;
+
+O backend está hospedado dentro da Vercel, onde pode apresentar inconsistências devido a utilização de serviços gratuítos do serviço.
 
 ## Rotas da aplicação
 
