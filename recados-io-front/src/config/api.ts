@@ -17,7 +17,7 @@ API.interceptors.request.use((config: any) => {
   return config;
 }, (error) => {
   $toast.clear();
-  $toast.error('Não foi possível completar a ação desejada.');
+  $toast.error('Não foi possível completar a ação desejada. Tente novamente.');
   return Promise.reject(error);
 })
 
@@ -27,7 +27,7 @@ API.interceptors.response.use((config: any) => {
   return config;
 }, (error) => {
   $toast.clear();
-  $toast.error('Não foi possível completar a ação desejada.');
+  $toast.error('Não foi possível completar a ação desejada. Tente novamente.');
   return Promise.reject(error);
 })
 
