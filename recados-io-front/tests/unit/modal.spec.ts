@@ -1,47 +1,31 @@
 import { shallowMount, mount } from '@vue/test-utils'
-import Select from '@/components/Select.vue';
+import Modal from '@/components/Modal.vue';
 
-describe('Select.vue', () => {
+describe('Modal.vue', () => {
 
-  const inputName = 'textarea';
-  const inputValue = '';
+  const modalTitle = 'Título do modal';
 
-  it('render Select with props', () => {
-    const wrapper = mount(Select, {
+  it('Modal is showed', () => {
+    let showModal = true;
+    const modalTitle = 'Título do modal';
+    const wrapper = mount(Modal, {
       props: {
-        inputName,
-        inputValue
+        showModal,
+        modalTitle
       }
     });
-
-    const select = wrapper.find('select');
-    const selectId = select.attributes('id');
-
-    expect(selectId).toBe(inputName);
-
+    expect(wrapper.vm.showModal).toBe(true);
   });
 
-  it('Select show options to select message type', () => {
-    const inputName = 'select';
-    const inputValue = '';
-
-    const wrapper = mount(Select, {
+  it('Modal is closed', () => {
+    let showModal = false;
+    const wrapper = mount(Modal, {
       props: {
-        inputName,
-        inputValue
+        showModal,
+        modalTitle
       }
     });
-
-    const selectElement = wrapper.find('select');
-    const options = selectElement.findAll('option');
-
-    expect(options.length).toBe(4);
-
-    expect(options[0].text()).toBe('Selecione uma prioridade');
-    expect(options[1].text()).toBe('Normal');
-    expect(options[2].text()).toBe('Importante');
-    expect(options[3].text()).toBe('Urgente');
-
+    expect(wrapper.vm.showModal).toBe(false);
   });
   
 })

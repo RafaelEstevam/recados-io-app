@@ -14,8 +14,7 @@
         :key="message._id"
         v-if="messages.length > 0"
         v-for="message in messages"
-        @handleGetMessagesByChannel="handleGetMessagesByChannel"
-        @handleRefreshMessagesListOfChannel="handleRefreshMessagesListOfChannel"
+        @handleDeleteMessage="handleDeleteMessageById"
       />
       <h2 v-else class="board__title">Sem recados neste mural.</h2>
     </div>
@@ -37,7 +36,7 @@
   import { useRoute } from 'vue-router';
   import { useStore } from 'vuex';
 
-  import { getMessages } from '@/services/message';
+  import { getMessages, deleteMessage } from '@/services/message';
   import { PusherConnection, PusherMessage } from '@/services/pusher';
   import { MessageInterface } from '@/interfaces/message.interface';
 
@@ -174,6 +173,16 @@
 
       handleRefreshMessagesListOfChannel(){
         this.channel.handleTrigger({type: "list-updated"})
+      },
+
+      handleDelleteCallback(){
+        this.handleRefreshMessagesListOfChannel();
+        this.handleGetMessagesByChannel('undefined');
+      },
+
+      handleDeleteMessageById(id?: string){
+        this.$store.dispatch('handleShowLoading', {showLoading: true});
+        deleteMessage(this.handleDelleteCallback, this.handleFinishinRequest, id)
       },
 
       handleFilter(filter:string){

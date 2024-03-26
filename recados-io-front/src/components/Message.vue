@@ -35,7 +35,6 @@
   import type { PropType } from 'vue';
   import { defineComponent } from 'vue';
   import {MessageInterface} from '@/interfaces/message.interface';
-  import { deleteMessage } from '@/services/message';
   import { useStore } from 'vuex';
 
   import moment from 'moment';
@@ -93,7 +92,7 @@
       }
     },
 
-    emits: ['handleGetMessagesByChannel', 'handleRefreshMessagesListOfChannel'],
+    emits: ['handleDeleteMessage'],
 
     methods:{
 
@@ -102,13 +101,7 @@
       },
 
       async handleDeleteMessage(id?: string){
-        this.$store.dispatch('handleShowLoading', {showLoading: true});
-        deleteMessage(this.handleDelleteCallback, this.handleFinishinRequest, id)
-      },
-
-      handleDelleteCallback(){
-        this.$emit('handleRefreshMessagesListOfChannel');
-        this.$emit('handleGetMessagesByChannel', 'undefined');
+        this.$emit('handleDeleteMessage', id);
       },
 
       handleFinishinRequest(){
