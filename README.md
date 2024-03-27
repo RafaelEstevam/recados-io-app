@@ -57,7 +57,7 @@ O frontend está hospedado dentro da Netlify.
 - Axios: Ferramenta para integração e execução de requisições no frontend;
 - MongoDB: Banco de dados não relacional para salvamento das mensagens;
 
-O backend está hospedado dentro da Vercel, onde pode apresentar inconsistências devido a utilização de serviços gratuítos do serviço.
+O backend está hospedado dentro da Vercel, onde pode apresentar inconsistências devido a utilização de serviços gratuítos.
 
 ## Rotas da aplicação
 
