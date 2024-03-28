@@ -7,6 +7,8 @@
       :connectedUsers="connectedUsers"
       @filterAction="handleFilter"
     />
+
+    <notification />
     
     <div class="board__messages" >
       <message
@@ -24,8 +26,12 @@
       :showModal="showModal"
       @closeModal="handleCloseModal"
     >
-      <addMessage @handleClientSendMessage="handleClientSendMessage"/>
+      <addMessage
+        @handleClientSendMessage="handleClientSendMessage"
+        @handleShowClientIsTyping="handleShowClientIsTyping"
+      />
     </modal>
+
 
   </div>
 </template>
@@ -47,8 +53,10 @@
   import Modal from '@/components/Modal.vue';
   import ButtonComponent from '@/components/Button.vue';
   import Filter from '@/components/Filter.vue';
+  import Notification from '@/components/Notification.vue';
 
   import AddMessage from '@/modules/AddMessage.vue';
+  import { ShowTypingInterface } from '@/interfaces/typing.interface';
 
   export default defineComponent({
     name: 'board',
@@ -59,7 +67,8 @@
       Filter,
       Message,
       Modal,
-      AddMessage
+      AddMessage,
+      Notification
     },
     
     setup() {
@@ -83,6 +92,7 @@
     },
 
     data(): any{
+
       return {
         messages: new Array<MessageInterface>(),
         auth: '',
@@ -107,11 +117,6 @@
         this.important = newValue.filter((item: MessageInterface) => item.type === 'important').length;
         this.urgent = newValue.filter((item: MessageInterface) => item.type === 'urgent').length;
       },
-      showModal(show){
-        if(show){
-          this.handleClientTyping();
-        }
-      }
     },
 
     methods: {
@@ -143,8 +148,13 @@
         scrollDown();
       },
 
-      handleUserIsTyping({data}:any){
-        this.$toast.info(`Usuário ${!data.isAnonymous ? data.userName : 'Anônimo'} está deixando um recado`);
+      handleUserIsTyping({data, isTyping}:any){
+        const showIsTyping:ShowTypingInterface = {
+          user: data,
+          isTyping
+        }
+
+        this.$store.dispatch('handleShowTyping', showIsTyping);
       },
 
       handleListUpdatedOnBoard(){
@@ -161,8 +171,8 @@
         this.channel.handleBindOnChannelByBindName('pusher:subscription_count', this.handleCountConnection)
       },
 
-      handleClientTyping(){
-        this.channel.handleTrigger({data: this.user, type: 'typing'})
+      handleShowClientIsTyping(isTyping:boolean){
+        this.channel.handleTrigger({data: this.user, type: 'typing', isTyping})
       },
 
       handleClientSendMessage(data: any){
