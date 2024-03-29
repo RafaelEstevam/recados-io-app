@@ -19,6 +19,7 @@
       :showValidation="messageValidation"
       :validationMessage="messageValidationMessage"
       v-model="message"
+      @keypress="handleIsTyping"
     />
 
     <div v-if="anonyousUser" class="addMessage__checkbox__wrapper">
@@ -84,6 +85,8 @@
   import SelectComponent from '@/components/Select.vue';
   import TextareaComponent from '@/components/Textarea.vue';
   import CheckboxComponent from '@/components/Checkbox.vue';
+  import { ShowTypingInterface } from "@/interfaces/typing.interface";
+  import debounce from "@/utils/debounce";
 
   export default defineComponent({
     name: 'addMessage',
@@ -131,7 +134,7 @@
       }
     },
 
-    emits: ['setShow', 'sendComponent', 'handleClientSendMessage'],
+    emits: ['setShow', 'sendComponent', 'handleClientSendMessage', 'handleShowClientIsTyping'],
 
     methods: {
 
@@ -205,6 +208,25 @@
           this.messageValidation = false;
         }
         return true;
+      },
+
+      handleHideShowTyping(){
+        return () => {
+          this.$emit('handleShowClientIsTyping', false)
+        }
+      },
+
+      handleIsTyping(){
+
+        this.$emit('handleShowClientIsTyping', true)
+        // const isTyping:ShowTypingInterface = {
+        //   userName: this.user.userName,
+        //   isTyping: true
+        // }
+
+        // this.$store.dispatch('handleShowTyping', isTyping);
+        // const callback = this.handleHideShowTyping();
+        debounce(3000, this.handleHideShowTyping())();
       },
 
       updateCheckBox(value:boolean){
