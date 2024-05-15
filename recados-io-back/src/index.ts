@@ -28,7 +28,7 @@ mongoose.connect(process.env.MONGO_DB_URL || '').then((response) => {
     console.log(e);
 });
 
-app.listen(8888, () => {
+app.listen(process.env.PORT || 8888, () => {
     console.log("Server is open.");
 });
 
