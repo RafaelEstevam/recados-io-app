@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import { HubspotSchedules } from './schedule/sendToHubspot.schedule';
 
 import { routes } from './routes';
 
@@ -22,6 +23,7 @@ app.use(routes);
 
 mongoose.connect(process.env.MONGO_DB_URL || '').then((response) => {
     console.log('Mongo connected');
+    HubspotSchedules()
 }).catch((e) => {
     console.log(e);
 });
