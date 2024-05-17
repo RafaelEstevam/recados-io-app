@@ -30,3 +30,17 @@ content-type: application/json
 }
 
 ###
+
+POST http://localhost:8888/logs
+content-type: application/json
+
+{
+  "name": "teste"
+}
+
+###
+
+GET http://localhost:8888/logs/all
+content-type: application/json
+
+###
