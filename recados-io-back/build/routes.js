@@ -6,12 +6,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.routes = void 0;
 const express_1 = require("express");
 const message_controller_1 = __importDefault(require("./controller/message.controller"));
+const log_controller_1 = __importDefault(require("./controller/log.controller"));
 // import GPTController from './controller/gpt.controller';
 const pusher_1 = require("./pusher");
 const routes = (0, express_1.Router)();
 exports.routes = routes;
 routes.get('/', (req, res) => {
     res.send({ message: 'Hello world' });
+});
+routes.get('/teste', (req, res) => {
+    res.send({ message: 'teste' });
 });
 routes.post('/pusher/auth', (req, res) => {
     const socketId = req.body.socket_id;
@@ -23,3 +27,5 @@ routes.get('/messages/all', message_controller_1.default.getAll);
 routes.post('/messages/all', message_controller_1.default.getAllByChannelId);
 routes.post('/messages/new', message_controller_1.default.post);
 routes.delete('/messages/delete/:id', message_controller_1.default.delete);
+routes.post('/logs', log_controller_1.default.post);
+routes.get('/logs/all', log_controller_1.default.getAll);

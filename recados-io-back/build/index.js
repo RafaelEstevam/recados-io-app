@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const sendToHubspot_schedule_1 = require("./schedule/sendToHubspot.schedule");
+// import { HubspotSchedules } from './schedule/sendToHubspot.schedule';
 const routes_1 = require("./routes");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
@@ -21,10 +21,10 @@ app.use(express_1.default.json());
 app.use(routes_1.routes);
 mongoose_1.default.connect(process.env.MONGO_DB_URL || '').then((response) => {
     console.log('Mongo connected');
-    (0, sendToHubspot_schedule_1.HubspotSchedules)();
+    // HubspotSchedules();
 }).catch((e) => {
     console.log(e);
 });
-app.listen(8888, () => {
+app.listen(process.env.PORT || 8888, () => {
     console.log("Server is open.");
 });
