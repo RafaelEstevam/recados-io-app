@@ -18,6 +18,7 @@ routes.post('/pusher/auth', (req: Request, res: Response) => {
 });
 
 routes.get('/messages/all', MessageController.getAll);
+routes.get('/messages/message/:id', MessageController.getMessageById);
 routes.post('/messages/all', MessageController.getAllByChannelId);
 routes.post('/messages/new', MessageController.post);
 routes.delete('/messages/delete/:id', MessageController.delete);

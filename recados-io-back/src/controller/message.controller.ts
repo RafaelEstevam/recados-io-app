@@ -12,6 +12,17 @@ export default {
         return res.json(messages)
     },
 
+    async getMessageById(req: Request, res: Response){
+        const {id} = req.params;
+        const message = await Message.findById(id);
+
+        if(!message){
+            return res.status(404).send({message: 'Não encontrado'})
+        }
+        
+        return res.send(message);
+    },
+
     async getAllByChannelId(req: Request, res: Response){
         const {channel, type} = req.body;
         let query = {channel};
