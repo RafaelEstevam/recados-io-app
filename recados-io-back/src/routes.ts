@@ -1,5 +1,6 @@
 import {Router, Request, Response} from 'express';
 import MessageController from './controller/message.controller';
+import LogController from './controller/log.controller';
 // import GPTController from './controller/gpt.controller';
 
 import { pusher } from './pusher';
@@ -8,6 +9,10 @@ const routes = Router();
 
 routes.get('/', (req: Request, res: Response) => {
     res.send({message: 'Hello world' })
+});
+
+routes.get('/teste', (req: Request, res: Response) => {
+    res.send({message: 'teste' })
 });
 
 routes.post('/pusher/auth', (req: Request, res: Response) => {
@@ -23,6 +28,7 @@ routes.post('/messages/all', MessageController.getAllByChannelId);
 routes.post('/messages/new', MessageController.post);
 routes.delete('/messages/delete/:id', MessageController.delete);
 
-// routes.post('/gpt', GPTController.post);
+routes.post('/logs', LogController.post);
+routes.get('/logs/all', LogController.getAll);
 
 export {routes};
